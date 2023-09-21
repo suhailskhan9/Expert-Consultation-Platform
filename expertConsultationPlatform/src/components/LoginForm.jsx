@@ -58,9 +58,9 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }){
                     
                     
                     <div className={`w-2/5 bg-blue-400 text-white rounded-tr-2xl rounded-br-2xl py-36 px-12 ${rightPanel}`}>
-                        <h2 className="text-3xl font-bold mb-2">Hello, Friend</h2>
+                        <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
                         <div className="border-2 w-10 border-white inline-block"></div>
-                        <p className="mb-10">Fill up personal information and start journey with us.</p>
+                        <p className="mb-10">To keep connected with us please login with your personal info.</p>
                         <button onClick={toggleMode} className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-blue-400 ">Sign Up</button>
                     </div>
 
