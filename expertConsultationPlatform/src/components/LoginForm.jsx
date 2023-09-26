@@ -36,16 +36,37 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }){
                         </div>
                         <p className='text-gray-400 my-3'>or use your email account</p>
                         <div className="flex flex-col items-center">
-                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3"><FaRegEnvelope className='text-gray-400 m-2'/>
-                            <input type="email" name='email' placeholder='Email' className='bg-gray-100 outline-none text-sm flex-1'/>
+                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                                <FaRegEnvelope className='text-gray-400 m-2'/>
+                                <input 
+                                    type="email" 
+                                    name='email' 
+                                    placeholder='Email' 
+                                    className='bg-gray-100 outline-none text-sm flex-1'
+                                />
                             </div>
 
-                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3"><MdLockOutline className='text-gray-400 m-2'/>
-                            <input type="password" name='password' placeholder='Password' className='bg-gray-100 outline-none text-sm flex-1'/>
+                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                                <MdLockOutline className='text-gray-400 m-2'/>
+                                <input 
+                                    type="password" 
+                                    name='password' 
+                                    placeholder='Password' 
+                                    className='bg-gray-100 outline-none text-sm flex-1'
+                                />
                             </div>
 
                             <div className="flex justify-between w-64 mb-5">
-                                <label htmlFor="" className="flex items-center text-xs"><input type="checkbox" name="remember" className='mr-1'/>Remember me</label>
+                                <label 
+                                    htmlFor="" 
+                                    className="flex items-center text-xs">
+                                        <input 
+                                            type="checkbox" 
+                                            name="remember" 
+                                            className='mr-1'
+                                        />
+                                        Remember me
+                                </label>
                                 <a href="#" className='text-xs'>Forgot Password?</a>
                             </div>
 

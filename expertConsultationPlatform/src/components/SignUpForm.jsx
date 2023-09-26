@@ -1,10 +1,15 @@
 /* eslint-disable react/prop-types */
+import { useState } from 'react';
 import {FaFacebookF, FaGoogle, FaLinkedinIn, FaRegEnvelope, FaUser} from 'react-icons/fa'
 
 import {MdLockOutline} from 'react-icons/md'
 
 
 function SignupForm({ userType, toggleMode, leftPanel,rightPanel }) {
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+
+
     return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
             
@@ -41,28 +46,74 @@ function SignupForm({ userType, toggleMode, leftPanel,rightPanel }) {
 
                         
 
-                        <div className="flex flex-col items-center">
-                        <div className="bg-gray-100 w-64 p-2 flex items-center mb-3"><FaUser className='text-gray-400 m-2'/>
-                                <input type="text" name='name' placeholder='Name' className='bg-gray-100 outline-none text-sm flex-1'/>
+                        <form className="flex flex-col items-center">
+                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                                <FaUser className='text-gray-400 m-2'/>
+                                    <input 
+                                        required 
+                                        id='name' 
+                                        value={name} 
+                                        onChange={e => setName(e.target.value)}
+                                        type="text" 
+                                        name='name' 
+                                        placeholder='Name' 
+                                        className='bg-gray-100 outline-none text-sm flex-1'
+                                    />
                             </div>
 
 
-                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3"><FaRegEnvelope className='text-gray-400 m-2'/>
-                                <input type="email" name='email' placeholder='Email' className='bg-gray-100 outline-none text-sm flex-1'/>
+                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                                <FaRegEnvelope className='text-gray-400 m-2'/>
+                                <input 
+                                    required 
+                                    id='email' 
+                                    value={email} 
+                                    onChange={e => setEmail(e.target.value)}
+                                    type="email" 
+                                    name='email' 
+                                    placeholder='Email' 
+                                    className='bg-gray-100 outline-none text-sm flex-1'
+                                />
                             </div>
 
-                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3"><MdLockOutline className='text-gray-400 m-2'/>
-                            <input type="password" name='password' placeholder='Password' className='bg-gray-100 outline-none text-sm flex-1'/>
+                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                                <MdLockOutline className='text-gray-400 m-2'/>
+                                <input 
+                                    type="password" 
+                                    name='password' 
+                                    placeholder='Password' 
+                                    className='bg-gray-100 outline-none text-sm flex-1'
+                                />
                             </div>
 
                             <div className="flex justify-between w-64 mb-5">
-                                <label htmlFor="" className="flex items-center text-xs"><input type="checkbox" name="remember" className='mr-1'/>Remember me</label>
-                                <a href="#" className='text-xs'>Forgot Password?</a>
+                                <label 
+                                    htmlFor="" 
+                                    className="flex items-center text-xs"
+                                >
+                                    <input 
+                                        type="checkbox" 
+                                        name="remember" 
+                                        className='mr-1'
+                                    />
+                                    Remember me
+                                </label>
+                                <a 
+                                    href="/forgotpassword" 
+                                    className='text-xs'
+                                >
+                                    Forgot Password?
+                                </a>
                             </div>
 
-                            <a href="#" className="border-2 border-blue-400 rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue-400 hover:text-white">Sign Up</a>
+                            <button 
+                                href="#" 
+                                className="border-2 border-blue-400 rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue-400 hover:text-white"
+                            >
+                                Sign Up
+                            </button>
                         
-                        </div>
+                        </form>
 
                     </div>
 
