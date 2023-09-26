@@ -44,9 +44,6 @@
 
 // export default Home;
 
-
-import React from 'react';
-
 const Home = () => {
   return (
     <main className=" text-blue-400 bg-white hover:bg-gradient-to-b from-blue-300 to-blue-100 flex flex-col h-screen">

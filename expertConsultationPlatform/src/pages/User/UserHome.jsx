@@ -1,4 +1,4 @@
-import Sidebar, { SidebarItem } from "./Sidebar";
+import Sidebar, { SidebarItem } from "../../components/Sidebar";
 import {LifeBuoy, Receipt, Boxes, Package, UserCircle, BarChart3, LayoutDashboard, Settings} from "lucide-react";
     
 
