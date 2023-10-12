@@ -11,7 +11,7 @@ function SignupForm({ userType, toggleMode, leftPanel,rightPanel }) {
 
 
     return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-blue-100">
             
         <div className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         

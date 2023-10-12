@@ -1,6 +1,6 @@
 import { useState } from "react"
-import LoginForm from "./LoginForm"
-import SignUpForm from "./SignUpForm"
+import LoginForm from "../LoginForm"
+import SignUpForm from "../SignUpForm"
 
 
 function UserLoginSignUp(){
