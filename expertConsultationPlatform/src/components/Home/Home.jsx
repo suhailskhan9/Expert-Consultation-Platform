@@ -17,8 +17,8 @@ function Home() {
             }}
       
           >
-            <h2 className="text-6xl  mb-4">Welcome to <span className='font-mono font-bold'>XpertConsult</span></h2>
-            <p className="text-xl text-gray-800 mb-8">Choose your role to get started:</p>
+            <h2 className="text-8xl font-sans text-gray-800 mb-4">Welcome to <span className='font-mono font-bold'>XpertConsult</span></h2>
+            <p className="text-2xl text-gray-800 mb-8">Choose your role to get started:</p>
           </div>
 
           {/* How It Works Section */}
