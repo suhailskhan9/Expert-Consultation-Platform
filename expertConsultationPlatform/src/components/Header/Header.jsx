@@ -5,7 +5,7 @@ export default function Header() {
         <header className="bg-blue-200 shadow sticky z-50 top-0">
             <nav className=" px-4 lg:px-6 py-2.5">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                    <Link to="/" className=" font-mono font-bold flex items-center">
+                    <Link to="/" className=" font-mono font-bold flex items-center text-xl">
                         XpertConsult
                     </Link>
                     <div className="flex items-center lg:order-2">
