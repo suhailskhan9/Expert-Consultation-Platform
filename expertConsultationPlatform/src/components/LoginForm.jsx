@@ -13,11 +13,21 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    let response;
+
     try {
-      const response = await axios.post('http://localhost:5000/user/login', {
+      if(userType === "User"){
+        response = await axios.post('http://localhost:5000/user/login', {
         email,
         password,
       });
+      }
+      else{
+        response = await axios.post('http://localhost:5000/expert/login', {
+        email,
+        password,
+      });
+      }
 
       if (response.status === 200) {
         // Successful login, you can redirect or perform other actions

@@ -111,15 +111,28 @@ function SignupForm({ userType, toggleMode, leftPanel, rightPanel }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const userData = {
+    const data = {
       username: name,
       email,
       password,
     };
 
+    let response; 
+
     try {
-        const response = await axios.post('http://localhost:5000/user', userData);
-        console.log(response.data); // You can handle the response here
+      if(userType === "User"){
+        response = await axios.post('http://localhost:5000/user', data);
+        
+      }
+      else{
+        response = await axios.post('http://localhost:5000/expert', data);
+      }
+      console.log(response.data);
+
+        // You can handle the response here
+      setName('');
+      setEmail('');
+      setPassword('');
     } catch (error) {
       console.error(error);
     }

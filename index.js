@@ -109,6 +109,33 @@ app.post('/user', async (req, res) => {
   }
 });
 
+const expertSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+});
+
+const Expert = mongoose.model('Expert', expertSchema);
+
+app.post('/expert', async (req, res) => {
+  const { username, email, password, expertise, certifications } = req.body;
+
+  const expert = new Expert({
+    username,
+    email,
+    password,
+  });
+
+  try {
+    await expert.save();
+    res.status(201).json({ message: 'Expert created' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 app.post('/user/login', async (req, res) => {
     const { email, password } = req.body;
   
@@ -129,7 +156,22 @@ app.post('/user/login', async (req, res) => {
     }
   });
   
+  app.post('/expert/login', async (req, res) => {
+    const { email, password } = req.body;
   
+    try {
+      const expert = await Expert.findOne({ email });
+  
+      if (expert && expert.password === password) {
+        return res.status(200).json({ message: 'Login successful' });
+      }
+  
+      return res.status(401).json({ message: 'Invalid email or password' });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
 
 const PORT = process.env.PORT || 5000;
 
