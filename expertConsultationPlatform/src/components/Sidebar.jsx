@@ -9,8 +9,8 @@ export default function Sidebar({ children }) {
     const [expanded, setExpanded] = useState(true)
     
     return (
-      <aside className="h-screen">
-        <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+      <aside className="h-screen bg-blue-100">
+        <nav className="h-full flex flex-col  border-r shadow-sm">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src="https://img.logoipsum.com/243.svg"
@@ -66,8 +66,8 @@ export function SidebarItem({ icon, text, active, alert }) {
           transition-colors group
           ${
             active
-              ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-              : "hover:bg-indigo-50 text-gray-600"
+              ? "bg-gradient-to-tr from-blue-100 to-blue-300 text-blue-800"
+              : "hover:bg-blue-200 text-gray-600"
           }
       `}
       >
@@ -81,7 +81,7 @@ export function SidebarItem({ icon, text, active, alert }) {
         </span>
         {alert && (
           <div
-            className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
+            className={`absolute right-2 w-2 h-2 rounded bg-blue-400 ${
               expanded ? "" : "top-2"
             }`}
           />
@@ -91,7 +91,7 @@ export function SidebarItem({ icon, text, active, alert }) {
           <div
             className={`
             absolute left-full rounded-md px-2 py-1 ml-6
-            bg-indigo-100 text-indigo-800 text-sm
+            bg-indigo-100 text-blue-800 text-sm
             invisible opacity-20 -translate-x-3 transition-all
             group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
         `}

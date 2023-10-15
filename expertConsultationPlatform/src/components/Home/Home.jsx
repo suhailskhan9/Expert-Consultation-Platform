@@ -7,17 +7,18 @@ function Home() {
         <main className="bg-blue-100 flex-1 overflow-y-auto p-4">
 
           {/* Landing Content */}
-          <div className="bg-blue-100 h-screen flex flex-col justify-center items-center" 
+          <div className="bg-blue-100 flex flex-col justify-center items-center" 
             style={{
               backgroundImage: `url("${image}")`,
-              backgroundSize: 'cover',
+              backgroundSize: 'auto',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
-              minHeight: '100vh', // Set a minimum height to cover the entire viewport
+              minHeight: '100vh',
+              // Set a minimum height to cover the entire viewport
             }}
       
           >
-            <h2 className="text-8xl font-sans text-gray-800 mb-4">Welcome to <span className='font-mono font-bold'>XpertConsult</span></h2>
+            <h2 className="text-8xl font-sans text-gray-800  mb-4">Welcome to <span className='font-mono font-bold'>XpertConsult</span></h2>
             <p className="text-2xl text-gray-800 mb-8">Choose your role to get started:</p>
           </div>
 
