@@ -1,9 +1,9 @@
-import { useState } from "react";
 import Sidebar, { SidebarItem } from "../../components/Sidebar";
-import {LifeBuoy,User,Calendar,Inbox, Receipt, Boxes, Package, UserCircle, BarChart3, LayoutDashboard, Settings, Mail, IndianRupee, LogOut, Video, MessageCircle} from "lucide-react";
+import {LifeBuoy,User,Calendar,Inbox, Receipt, Boxes, Package, UserCircle, BarChart3, LayoutDashboard, Settings, Mail, IndianRupee, LogOut, Video, Search, MessageCircle} from "lucide-react";
+import { useState } from "react";
 
+export default function UserProfile(){
 
-export default function ExpertHome(){
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -25,8 +25,8 @@ export default function ExpertHome(){
       };
 
 
-return(
 
+return(
 
     <div className="flex">
 
@@ -35,13 +35,13 @@ return(
             <SidebarItem
                 icon = {<User size = {20} />}
                 text = "Profile"
-                alert
+                active
                 />
-            <SidebarItem icon = {<Calendar size={20}/>} text="Calendar" active />
+            <SidebarItem icon = {<Search size={20}/>} text="Browse Experts"  />
             <SidebarItem icon = {<Inbox size={20} />} text="Inbox" />
             <SidebarItem icon = {<MessageCircle size={20} />} text="Chat"  />
             <SidebarItem icon = {<Video size={20} />} text="Video Call" alert />
-            <SidebarItem icon = {<LogOut size={20} />} text="Log Out" />
+            <SidebarItem icon = {<LogOut  />} text="Log Out" />
             <hr className="my-3"/>
             <SidebarItem icon={<Settings size={20} />} text="Settings" />
             <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
@@ -51,10 +51,9 @@ return(
         <p>This is the content of the right side container.</p>
         {/* Add more content as needed */}
 
-
-       {/* Right side container with user profile form */}
+        {/* Right side container with user profile form */}
       <div className="flex-1 p-4">
-        <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
+        <h2 className="text-2xl font-semibold mb-4">User Profile</h2>
         <form onSubmit={handleSubmit} className="max-w-md space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-600">
@@ -86,7 +85,7 @@ return(
             />
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="specialization" className="block text-sm font-medium text-gray-600">
               Specialization:
             </label>
@@ -99,7 +98,7 @@ return(
               className="mt-1 p-2 w-full border rounded-md"
               required
             />
-          </div>
+          </div> */}
 
           {/* Add more form fields as needed */}
           
@@ -108,6 +107,9 @@ return(
           </button>
         </form>
       </div>
+
+
+
 
 
       </div>
