@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaFacebookF, FaGoogle, FaLinkedinIn, FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // for navigation
 
+ 
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -33,10 +34,12 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
         // Successful login, you can redirect or perform other actions
         console.log('Login successful');
         if(userType === "User"){
-        navigate('userprofile');
+          
+            navigate('/userprofile')
+          
         }
         else{
-          navigate('expertprofile');
+            navigate('/expertprofile')
         }
       } else {
         console.log('Login failed');
@@ -127,3 +130,4 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
 }
 
 export default LoginForm;
+
