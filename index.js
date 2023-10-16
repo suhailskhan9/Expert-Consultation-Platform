@@ -205,6 +205,14 @@ io.on('connection', (socket) => {
   });
 });
 
+app.get('/getUserData', (req, res) => {
+  User.find()
+  .then(userData => res.json(userData))
+  .catch(err => res.json(err))
+})
+
+
+
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 

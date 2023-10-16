@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar, { SidebarItem } from "../../components/Sidebar";
 import {LifeBuoy,User,Calendar,Inbox, Receipt, Boxes, Package, UserCircle, BarChart3, LayoutDashboard, Settings, Mail, IndianRupee, LogOut, Video, MessageCircle} from "lucide-react";
+import axios from "axios";
 
 
 export default function ExpertProfile(){
@@ -23,6 +24,17 @@ export default function ExpertProfile(){
         // Handle form submission, e.g., send data to a server
         console.log("Form submitted with data:", formData);
       };
+
+      const [userData, setUserData] = useState([])
+
+      useEffect(() => {
+        axios.get('http://localhost:5000/getUserData')
+        .then(userData => setUserData(userData.data))
+        .then(console.log(userData.username))  
+        .catch(err => console.log(err))
+      }, [])
+
+
 
 
 return(
@@ -64,7 +76,7 @@ return(
               type="text"
               id="name"
               name="name"
-              value={formData.name}
+              value={userData.username}
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md"
               required
@@ -79,10 +91,11 @@ return(
               type="email"
               id="email"
               name="email"
-              value={formData.email}
+              defaultValue={userData.email}
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md"
               required
+              
             />
           </div>
 

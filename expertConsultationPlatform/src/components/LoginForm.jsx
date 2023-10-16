@@ -10,13 +10,7 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // for navigation
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setIsLoggedIn(true);
-  }, [])
-
-
+ 
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -40,14 +34,12 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
         // Successful login, you can redirect or perform other actions
         console.log('Login successful');
         if(userType === "User"){
-          if(isLoggedIn){
-            return <Navigate to = "/userprofile" />
-          }
+          
+            navigate('/userprofile')
+          
         }
         else{
-          if(isLoggedIn){
-            return <Navigate to = "/expertprofile" />
-          }
+            navigate('/expertprofile')
         }
       } else {
         console.log('Login failed');
