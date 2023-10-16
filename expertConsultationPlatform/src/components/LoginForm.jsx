@@ -130,3 +130,4 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
 }
 
 export default LoginForm;
+

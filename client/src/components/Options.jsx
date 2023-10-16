@@ -1,4 +1,3 @@
-
 import React, { useState, useContext } from 'react';
 import { Button, TextField, Grid, Typography, Container, Paper } from '@material-ui/core';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -38,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Options = ({ children }) => {
+const Sidebar = ({ children }) => {
   const { me, callAccepted, name, setName, callEnded, leaveCall, callUser } = useContext(SocketContext);
   const [idToCall, setIdToCall] = useState('');
   const classes = useStyles();
@@ -78,4 +77,4 @@ const Options = ({ children }) => {
   );
 };
 
-export default Options;
+export default Sidebar;
