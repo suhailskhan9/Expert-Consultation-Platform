@@ -56,13 +56,15 @@
 import React from 'react';
 
 const ExpertCard = ({ expert }) => {
-  const { name, categories, price } = expert;
+  const { name, categories, price, availability, contact } = expert;
 
   return (
     <div className="bg-blue-100 p-6 rounded-md shadow-md">
       <h3 className="text-xl font-semibold mb-2 text-blue-800">{name}</h3>
       <p className="text-gray-600 mb-2">{categories.join(', ')}</p>
       <p className="text-lg text-blue-500 font-semibold">{`Price: ${price}`}</p>
+      <p className="text-gray-600 mt-2">{`Availability: ${availability}`}</p>
+      <p className="text-gray-600 mt-2">{`Contact: ${contact}`}</p>
       <div className="mt-4 flex justify-between items-center">
         <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mr-2">
           Call
@@ -76,3 +78,4 @@ const ExpertCard = ({ expert }) => {
 };
 
 export default ExpertCard;
+
