@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // const app=require("express")();
 // const server = require("http").createServer(app);
 // const cors=require("cors");
@@ -76,11 +77,24 @@ const io = require("socket.io")(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
+=======
+
+const app = require("express")();
+const server = require("http").createServer(app);
+const cors = require("cors");
+
+const io = require("socket.io")(server, {
+	cors: {
+		origin: "*",
+		methods: [ "GET", "POST" ]
+	}
+>>>>>>> Stashed changes
 });
 
 app.use(cors());
 app.use(express.json()); // Add this line to parse JSON requests
 
+<<<<<<< Updated upstream
 mongoose.connect('mongodb://127.0.0.1:27017/ExpertConsultDB');
 
 const userSchema = new mongoose.Schema({
@@ -196,3 +210,28 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+=======
+const PORT = process.env.PORT || 5000;
+
+app.get('/', (req, res) => {
+	res.send('Running');
+});
+
+io.on("connection", (socket) => {
+	socket.emit("me", socket.id);
+
+	socket.on("disconnect", () => {
+		socket.broadcast.emit("callEnded")
+	});
+
+	socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+		io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+	});
+
+	socket.on("answerCall", (data) => {
+		io.to(data.to).emit("callAccepted", data.signal)
+	});
+});
+
+server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+>>>>>>> Stashed changes
