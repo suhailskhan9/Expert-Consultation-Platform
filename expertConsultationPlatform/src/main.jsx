@@ -8,19 +8,17 @@ import ExpertLoginSignUp from './components/ExpertLoginSignUp/ExpertLoginSignUp.
 import UserLoginSignUp from './components/UserLoginSignUp/UserLoginSignUp.jsx'
 import UserProfile from './pages/User/UserProfile.jsx'
 import ExpertProfile from './pages/Expert/ExpertProfile.jsx'
-import UserSearch from './pages/User/UserSearch.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element = {<Layout/>}>
       <Route path='' element = {<Home/>}/>
-      <Route path='expert/' element = {<ExpertLoginSignUp/>}>
-        <Route path="expertprofile" element={<ExpertProfile />} />
-      </Route>
-      <Route path='user/' element = {<UserLoginSignUp/>}>
-          <Route path="userprofile" element={<UserProfile />} />
-          <Route path="usersearch"  element = {<UserSearch/>} />
-      </Route>
+      <Route path='expert' element = {<ExpertLoginSignUp/>}/>
+        <Route path="/expertprofile" element={<ExpertProfile />} />
+      
+      <Route path='user' element = {<UserLoginSignUp/>}/>
+          <Route path="/userprofile" element={<UserProfile />} />
+      
     </Route>
   )
 )
