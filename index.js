@@ -50,14 +50,15 @@ const expertSchema = new mongoose.Schema({
 expertSchema.add({
   catagory : String,
   price : Number,
+  availability: String,
   contact : Number,
-  language:[String],
+  language:String,
 });
 
 const Expert = mongoose.model('Expert', expertSchema);
 
 app.post('/expert', async (req, res) => {
-  const { username, email, password} = req.body;
+  const { username, email, password, catagory, price, availability, contact, language} = req.body;
 
   const expert = new Expert({
     username,
@@ -65,8 +66,9 @@ app.post('/expert', async (req, res) => {
     password, 
     catagory, 
     price,
+    availability,
     contact,
-    language 
+    language, 
   });
 
   try {
@@ -144,6 +146,61 @@ app.post('/user/login', async (req, res) => {
     }
   });
   
+  app.put("/updateUserData/:email", async (req, res) => {
+    const email = req.params.email; // Note the use of req.params to get the email from the URL
+    const updatedUserData = req.body;
+
+    console.log(updatedUserData)
+  
+    try {
+      const updatedUser = await User.findOneAndUpdate({ email: email }, {
+        $set: {
+          username: updatedUserData.username, // Access username from the request body
+          // Add more fields as needed
+        }
+      }, { new: true });
+        
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      console.log("User data updated successfully");
+      res.status(200).json({ message: "User data updated successfully", updatedUser });
+    } catch (err) {
+      console.error("Error updating user data:", err);
+      res.status(500).json({ error: "Failed to update user data." });
+    }
+  });
+
+  app.put("/updateExpertData/:email", async (req, res) => {
+    const email = req.params.email; // Get the email from the URL parameter
+    const updatedExpertData = req.body; // This is the data sent in the request body
+  
+    try {
+      const updatedExpert = await Expert.findOneAndUpdate({ email: email }, {
+        $set: {
+          username: updatedExpertData.name, // Access username from the request body
+          catagory: updatedExpertData.categories, // Access category from the request body
+          price: updatedExpertData.price, // Access price from the request body
+          availability: updatedExpertData.availability,
+          contact: updatedExpertData.contact, // Access contact from the request body
+          language: updatedExpertData.languages, // Access language from the request body
+          // Add more fields as needed
+        }
+      }, { new: true });
+  
+      if (!updatedExpert) {
+        return res.status(404).json({ error: "Expert not found" });
+      }
+  
+      console.log("Expert data updated successfully");
+      res.status(200).json({ message: "Expert data updated successfully", updatedExpert });
+    } catch (err) {
+      console.error("Error updating expert data:", err);
+      res.status(500).json({ error: "Failed to update expert data." });
+    }
+  });
+  
 
 const PORT = process.env.PORT || 5000;
 
@@ -167,61 +224,7 @@ io.on('connection', (socket) => {
   });
 });
 
-app.get('/getUserData', (req, res) => {
-  User.find()
-  .then(userData => res.json(userData))
-  .catch(err => res.json(err))
-})
 
 
 
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

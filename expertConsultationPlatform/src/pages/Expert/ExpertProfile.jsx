@@ -162,9 +162,9 @@ export default function ExpertProfile() {
   });
 
   const location = useLocation();
+  const loggedInUserEmail = location.state?.email;
 
   useEffect(() => {
-    const loggedInUserEmail = location.state?.email;
 
     axios
       .get(`http://localhost:5000/getExpertData?email=${loggedInUserEmail}`)
@@ -175,11 +175,11 @@ export default function ExpertProfile() {
           setFormData({
             name: expertData.username,
             email: expertData.email,
-            categories: expertData.categories,
+            categories: expertData.catagory,
             price: expertData.price,
             availability: expertData.availability,
             contact: expertData.contact,
-            languages: expertData.languages,
+            languages: expertData.language,
           });
         } else {
           console.log("No expert data found in the response.");
@@ -204,8 +204,17 @@ export default function ExpertProfile() {
   const handleSaveClick = (e) => {
     e.preventDefault();
     // Handle form submission, e.g., send data to a server
-    console.log("Form submitted with data:", formData);
-  };
+    console.log(formData)
+    axios
+      .put(`http://localhost:5000/updateExpertData/${loggedInUserEmail}`, formData)
+      .then((response) => {
+        console.log(response.data)
+        console.log("User data updated successfully");
+      })
+      .catch((err) => {
+        console.log("Error updating user data:", err);
+      });
+      };
 
   return (
         <div className="flex">
