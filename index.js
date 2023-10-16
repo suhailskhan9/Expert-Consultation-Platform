@@ -10,7 +10,6 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
-
 app.use(cors());
 app.use(express.json()); // Add this line to parse JSON requests
 
@@ -48,15 +47,26 @@ const expertSchema = new mongoose.Schema({
   password: String,
 });
 
+expertSchema.add({
+  catagory : String,
+  price : Number,
+  contact : Number,
+  language:[String],
+});
+
 const Expert = mongoose.model('Expert', expertSchema);
 
 app.post('/expert', async (req, res) => {
-  const { username, email, password, expertise, certifications } = req.body;
+  const { username, email, password} = req.body;
 
   const expert = new Expert({
     username,
     email,
-    password,
+    password, 
+    catagory, 
+    price,
+    contact,
+    language 
   });
 
   try {
@@ -105,6 +115,35 @@ app.post('/user/login', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
+
+  app.get('/getUserData', async (req, res) => {
+    try {
+      // Fetch expert data based on the email query parameter
+      const email = req.query.email;
+      const users = await User.find({ email });
+  
+      // Send the expert data as a JSON response
+      res.json(users);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  app.get('/getExpertData', async (req, res) => {
+    try {
+      // Fetch expert data based on the email query parameter
+      const email = req.query.email;
+      const experts = await Expert.find({ email });
+  
+      // Send the expert data as a JSON response
+      res.json(experts);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
 
 const PORT = process.env.PORT || 5000;
 
