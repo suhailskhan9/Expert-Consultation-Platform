@@ -32,7 +32,12 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
       if (response.status === 200) {
         // Successful login, you can redirect or perform other actions
         console.log('Login successful');
-        navigate('/userHome');
+        if(userType === "User"){
+        navigate('/UserProfile');
+        }
+        else{
+          navigate('/ExpertProfile');
+        }
       } else {
         console.log('Login failed');
       }
