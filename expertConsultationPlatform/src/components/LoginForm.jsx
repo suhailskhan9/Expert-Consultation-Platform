@@ -33,7 +33,7 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
         // Successful login, you can redirect or perform other actions
         console.log('Login successful');
         if(userType === "User"){
-        navigate('userprofile');
+          navigate('userprofile');
         }
         else{
           navigate('expertprofile');
