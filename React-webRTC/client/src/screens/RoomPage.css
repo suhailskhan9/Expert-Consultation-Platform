@@ -1,0 +1,54 @@
+/* RoomPage.css */
+
+/* Style the container */
+div {
+  text-align: center;
+  width: 75%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+  background: linear-gradient(to bottom, #5DADE2, #ffffff); /* Lighter blue gradient */
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Style the headings */
+h1 {
+  text-align: center;
+  font-size: 25px;
+  color: #3782b4; /* Lighter blue color */
+}
+
+h4 {
+  font-size: 20px;
+  color: #3782b4;
+}
+
+/* Style the buttons */
+button {
+  background: linear-gradient(to bottom, #5DADE2, #3498db); /* Lighter blue gradient */
+  color: #fff;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 23px;
+  margin: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+button:hover {
+  background: linear-gradient(to bottom, #3498db, #2980b9);
+}
+
+/* Increase the size of the video block to 30% of the screen height */
+.ReactPlayer {
+  display: inline-block;
+  margin: 20px;
+  width: 100%;
+  height: 30vh; /* Adjust the height as needed */
+}
+
+/* Add more styles as needed */
