@@ -53,15 +53,18 @@
 
 
 // ExpertCard.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+
 
 const ExpertCard = ({ expert }) => {
-  const { name, categories, price, availability, contact } = expert;
+  const { username, categories, price, availability, contact } = expert;
 
   return (
     <div className="bg-blue-100 p-6 rounded-md shadow-md">
-      <h3 className="text-xl font-semibold mb-2 text-blue-800">{name}</h3>
-      <p className="text-gray-600 mb-2">{categories.join(', ')}</p>
+      <h3 className="text-xl font-semibold mb-2 text-blue-800">{username}</h3>
+      <p className="text-gray-600 mb-2">{categories}</p>
       <p className="text-lg text-blue-500 font-semibold">{`Price: ${price}`}</p>
       <p className="text-gray-600 mt-2">{`Availability: ${availability}`}</p>
       <p className="text-gray-600 mt-2">{`Contact: ${contact}`}</p>
@@ -77,5 +80,34 @@ const ExpertCard = ({ expert }) => {
   );
 };
 
-export default ExpertCard;
+const ExpertList = () => {
+  const [experts, setExperts] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get('http://localhost:5000/api/experts'); // Replace with the actual URL of your backend API
+        setExperts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle error here
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      {experts.map((expert) => (
+        <ExpertCard key={expert._id} expert={expert} />
+      ))}
+    </div>
+  );
+};
+
+export default ExpertList;
 

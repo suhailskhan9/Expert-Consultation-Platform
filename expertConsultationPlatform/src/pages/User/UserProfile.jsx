@@ -118,7 +118,7 @@
 import Sidebar, { SidebarItem } from "../../components/Sidebar";
 import { User, Search, Inbox, MessageCircle, Video, LogOut, Settings, LifeBuoy } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function UserProfile() {
@@ -126,11 +126,13 @@ export default function UserProfile() {
     name: "",
     email: "",
   });
-
   const location = useLocation();
+  const navigate = useNavigate();
+
 
   const [editMode, setEditMode] = useState(false);
   const loggedInUserEmail = location.state?.email;
+
 
 
   useEffect(() => {    
@@ -181,13 +183,20 @@ export default function UserProfile() {
         console.log("Error updating user data:", err);
       });
   };
+
+  const handleBrowseExpertsClick = () => {
+    // Navigate to the ExpertList (Browse Experts) page
+    console.log("handleBrowseExpertsClick function called"); // Add this line
+
+    navigate('/expertcard');
+  };
   
 
   return (
     <div className="flex">
       <Sidebar className="w-64">
         <SidebarItem icon={<User size={20} />} text="Profile" active />
-        <SidebarItem icon={<Search size={20} />} text="Browse Experts" />
+        <SidebarItem onClick={handleBrowseExpertsClick} icon={<Search size={20} />} text="Browse Experts" />
         <SidebarItem icon={<Inbox size={20} />} text="Inbox" />
         <SidebarItem icon={<MessageCircle size={20} />} text="Chat" />
         <SidebarItem icon={<Video size={20} />} text="Video Call" alert />

@@ -171,15 +171,16 @@ export default function ExpertProfile() {
       .then((response) => {
         // Check if the response is an array and has at least one element
         if (Array.isArray(response.data) && response.data.length > 0) {
-          const expertData = response.data[0]; // Access the first element
+          const expertData = response.data[0];
+          console.log(expertData) // Access the first element
           setFormData({
             name: expertData.username,
             email: expertData.email,
-            categories: expertData.catagory,
+            categories: expertData.categories,
             price: expertData.price,
             availability: expertData.availability,
             contact: expertData.contact,
-            languages: expertData.language,
+            languages: expertData.languages,
           });
         } else {
           console.log("No expert data found in the response.");

@@ -48,27 +48,27 @@ const expertSchema = new mongoose.Schema({
 });
 
 expertSchema.add({
-  catagory : String,
+  categories : String,
   price : Number,
   availability: String,
   contact : Number,
-  language:String,
+  languages:String,
 });
 
 const Expert = mongoose.model('Expert', expertSchema);
 
 app.post('/expert', async (req, res) => {
-  const { username, email, password, catagory, price, availability, contact, language} = req.body;
+  const { username, email, password, categories, price, availability, contact, languages} = req.body;
 
   const expert = new Expert({
     username,
     email,
     password, 
-    catagory, 
+    categories, 
     price,
     availability,
     contact,
-    language, 
+    languages, 
   });
 
   try {
@@ -132,6 +132,19 @@ app.post('/user/login', async (req, res) => {
     }
   });
 
+  app.get('/api/experts', async (req, res) => {
+    try {
+      // Fetch all experts
+      const experts = await Expert.find();
+  
+      // Send the expert data as a JSON response
+      res.json(experts);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
   app.get('/getExpertData', async (req, res) => {
     try {
       // Fetch expert data based on the email query parameter
@@ -180,11 +193,11 @@ app.post('/user/login', async (req, res) => {
       const updatedExpert = await Expert.findOneAndUpdate({ email: email }, {
         $set: {
           username: updatedExpertData.name, // Access username from the request body
-          catagory: updatedExpertData.categories, // Access category from the request body
+          categories: updatedExpertData.categories, // Access category from the request body
           price: updatedExpertData.price, // Access price from the request body
           availability: updatedExpertData.availability,
           contact: updatedExpertData.contact, // Access contact from the request body
-          language: updatedExpertData.languages, // Access language from the request body
+          languages: updatedExpertData.languages, // Access language from the request body
           // Add more fields as needed
         }
       }, { new: true });
