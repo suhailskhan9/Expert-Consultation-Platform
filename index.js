@@ -13,7 +13,7 @@ const io = require("socket.io")(server, {
 app.use(cors());
 app.use(express.json()); // Add this line to parse JSON requests
 
-mongoose.connect('mongodb://127.0.0.1:27017/ExpertConsultDB');
+mongoose.connect('mongodb+srv://prajwalw02:gYqJ6KDQCfp9eT4a@cluster0.ochlqqs.mongodb.net/ExpertConsultDB');
 
 const userSchema = new mongoose.Schema({
   username: String,

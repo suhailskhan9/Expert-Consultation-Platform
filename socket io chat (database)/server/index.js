@@ -8,7 +8,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-mongoose.connect('mongodb://127.0.0.1:27017/ExpertConsultDB', {
+mongoose.connect('mongodb+srv://prajwalw02:gYqJ6KDQCfp9eT4a@cluster0.ochlqqs.mongodb.net/ExpertConsultDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
