@@ -104,7 +104,7 @@ input[type="file"] {
   display: none;
 }
 
-button {
+.btn{
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -113,6 +113,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.btn:hover {
   background-color: #0056b3;
 }

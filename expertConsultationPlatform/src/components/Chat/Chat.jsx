@@ -168,7 +168,7 @@ function Chat({ socket, username, room }) {
             }
           }}
         />
-        <button onClick={() => { sendMessage(); sendFile(); }}>&#9658;</button>
+        <button className="btn" onClick={() => { sendMessage(); sendFile(); }}>&#9658;</button>
       </div>
     </div>
   );
