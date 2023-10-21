@@ -133,7 +133,7 @@ export default function UserProfile() {
   const [editMode, setEditMode] = useState(false);
   const loggedInUserEmail = location.state?.email;
 
-const userData = location.state
+const userdata = location.state
 
   useEffect(() => {    
         axios
@@ -196,7 +196,7 @@ const userData = location.state
     <div className="flex">
       <Sidebar className="w-64">
         <SidebarItem icon={<User size={20} />} text="Profile" active />
-        <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch" state={userData}/>
+        <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch" state={userdata}/>
         <SidebarItem icon={<Inbox size={20} />} text="Inbox" to=""/>
         <SidebarItem icon={<MessageCircle size={20} />} text="Chat" />
         <SidebarItem icon={<Video size={20} />} text="Video Call" alert />
