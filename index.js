@@ -1,27 +1,91 @@
 
 const express = require('express');
 const app = express();
+const http = require("http");
 const server = require("http").createServer(app);
 const cors = require("cors");
+const { Server } = require("socket.io");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const mongoose = require("mongoose");
-const io = require("socket.io")(server, {
+// const io = require("socket.io")(server, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST"],
+//   },
+// });
+
+const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
+
 app.use(cors());
+app.use("/uploads", express.static("uploads"));
 app.use(express.json()); // Add this line to parse JSON requests
 
-mongoose.connect('mongodb+srv://prajwalw02:gYqJ6KDQCfp9eT4a@cluster0.ochlqqs.mongodb.net/ExpertConsultDB');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+mongoose.connect('mongodb+srv://prajwalw02:gYqJ6KDQCfp9eT4a@cluster0.ochlqqs.mongodb.net/ExpertConsultDB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const userSchema = new mongoose.Schema({
   username: String,
-  email: String,
+  email: { type: String, unique: true },
   password: String,
 });
 
+const expertSchema = new mongoose.Schema({
+  username: String,
+  email: { type: String, unique: true },
+  password: String,
+});
+expertSchema.add({
+  categories : String,
+  price : Number,
+  availability: String,
+  contact : Number,
+  languages:String,
+});
+
+// const roomSchema = new mongoose.Schema({
+//   roomID: String,
+//   users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+//   experts: [{ type: Schema.Types.ObjectId, ref: 'Expert' }],
+//   roomName: String,
+//   roomType: String,
+//   createdAt: Date
+// });
+
+const messageSchema = new mongoose.Schema({
+  room: String,
+  author: String,
+  message: String,
+  fileUrl: String,
+  timestamp: Date,
+  isUser: Boolean,
+  date: Date,
+});
+const fileSchema = new mongoose.Schema({
+  room: String, 
+  author: String, 
+  fileName: String, 
+  // fileData: String,
+  date: Date, 
+  fileUrl: String,
+});
+
 const User = mongoose.model('User', userSchema);
+const Expert = mongoose.model('Expert', expertSchema);
+// const Room = mongoose.model('Room', roomSchema);
+const Message = mongoose.model("Message", messageSchema);
+const File = mongoose.model("File", fileSchema);
 
 app.post('/user', async (req, res) => {
   const { username, email, password } = req.body;
@@ -40,22 +104,6 @@ app.post('/user', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-const expertSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-});
-
-expertSchema.add({
-  categories : String,
-  price : Number,
-  availability: String,
-  contact : Number,
-  languages:String,
-});
-
-const Expert = mongoose.model('Expert', expertSchema);
 
 app.post('/expert', async (req, res) => {
   const { username, email, password, categories, price, availability, contact, languages} = req.body;
@@ -79,7 +127,6 @@ app.post('/expert', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
 
 app.post('/user/login', async (req, res) => {
     const { email, password } = req.body;
@@ -213,6 +260,94 @@ app.post('/user/login', async (req, res) => {
       res.status(500).json({ error: "Failed to update expert data." });
     }
   });
+
+  io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`);
+  
+    socket.on("join_room", (data) => {
+      socket.join(data);
+      console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    });
+  
+    socket.on("send_message", (data) => {
+      socket.to(data.room).emit("receive_message", data);
+      delete data._id;
+  
+      const newMessage = new Message(data);
+      newMessage.save()
+        .then(() => {
+          console.log('Message saved successfully');
+        })
+        .catch((err) => {
+          console.error('Error saving message:', err);
+        });
+    });
+    socket.on("send_file", (data) => {
+      const { room, author, fileName, fileData } = data;
+  
+      // Create a new File document and save it to the database
+      const newFile = new File({
+        room,
+        author,
+        fileName,
+        // fileData,
+        date: new Date(),
+        fileUrl: `/uploads/${fileName}`
+      });
+  
+      newFile.save()
+        .then(() => {
+          console.log('File saved successfully');
+          // Emit the "receive_file" event to notify clients about the uploaded file
+          io.to(room).emit("receive_file", {
+            room,
+            author,
+            fileName,
+            message: `${fileName}`,
+            date: new Date(),
+            fileUrl: `/uploads/${fileName}`
+          });
+        })
+        .catch((err) => {
+          console.error('Error saving file:', err);
+        });
+    });
+    socket.on("user_connect_history", (userId, roomName) => {
+      Promise.all([
+        Message.find({ room: roomName }).exec(),
+        File.find({ room: roomName }).exec(),
+      ])
+        .then(([messageHistory, fileHistory]) => {
+          // Process message history and include align-self styles
+          const formattedMessageHistory = messageHistory.map((message) => ({
+            ...message.toObject(),
+            isUser: message.author === userId,
+            isFile: false, // Add isFile property for messages
+          }));
+    
+          // Process file history and include align-self styles
+          const formattedFileHistory = fileHistory.map((file) => ({
+            ...file.toObject(),
+            isUser: file.author === userId,
+            isFile: true, // Add isFile property for files
+          }));
+    
+          // Combine message and file history and send it to the client as an array
+          socket.emit("chat_history", [...formattedMessageHistory, ...formattedFileHistory]);
+        })
+        .catch((err) => {
+          console.error('Error fetching chat history:', err);
+        });
+    });
+    
+  
+    socket.on("disconnect", () => {
+      console.log("User Disconnected", socket.id);
+    });
+    socket.on("error", (error) => {
+      console.error("Socket Error:", error);
+    });
+  });
   
 
 const PORT = process.env.PORT || 5000;
@@ -221,23 +356,20 @@ app.get("/", (req, res) => {
   res.send('Server is running.');
 });
 
-io.on('connection', (socket) => {
-  socket.emit('me', socket.id);
+// io.on('connection', (socket) => {
+//   socket.emit('me', socket.id);
 
-  socket.on('disconnect', () => {
-    socket.broadcast.emit('callended');
-  });
+//   socket.on('disconnect', () => {
+//     socket.broadcast.emit('callended');
+//   });
 
-  socket.on("calluser", ({ userToCall, signalData, from, name }) => {
-    io.to(userToCall).emit("calluser", { signal: signalData, from, name });
-  });
+//   socket.on("calluser", ({ userToCall, signalData, from, name }) => {
+//     io.to(userToCall).emit("calluser", { signal: signalData, from, name });
+//   });
 
-  socket.on("answercall", (data) => {
-    io.to(data.to).emit("callaccepted", data.signal);
-  });
-});
-
-
-
+//   socket.on("answercall", (data) => {
+//     io.to(data.to).emit("callaccepted", data.signal);
+//   });
+// });
 
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

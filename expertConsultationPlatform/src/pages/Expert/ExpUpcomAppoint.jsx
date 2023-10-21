@@ -3,7 +3,7 @@ import React from 'react';
 import Sidebar,{SidebarItem} from '../../components/Sidebar';
 import { User, Search, Inbox, MessageCircle, Video, LogOut, Settings, LifeBuoy, Calendar } from "lucide-react";
 import { useLocation } from 'react-router-dom';
-
+import { useNavigate, Navigate } from 'react-router-dom';
 
 const ExpertUpcomingAppointmentsPage = () => {
   // Sample static data for upcoming appointments
@@ -24,6 +24,12 @@ const ExpertUpcomingAppointmentsPage = () => {
   ];
   const location = useLocation();
   const userdata = location.state
+  const navigate = useNavigate();
+
+  const handleStartChat = () => {
+    navigate('/user/chat');
+  };
+
   return (
 <div className="flex">
       <Sidebar className="w-64">
@@ -56,7 +62,7 @@ const ExpertUpcomingAppointmentsPage = () => {
                 <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2">
                   Start Video Call
                 </button>
-                <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
+                <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md" onClick={handleStartChat}>
                   Start Chat
                 </button>
               </div>

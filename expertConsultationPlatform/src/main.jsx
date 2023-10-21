@@ -11,7 +11,7 @@ import ExpertProfile from './pages/Expert/ExpertProfile.jsx'
 import UserSearch from './pages/User/UserSearch.jsx'
 import UpcomingAppointmentsPage from './pages/User/UserUpcomAppoint.jsx'
 import ExpertUpcomingAppointmentsPage from './pages/Expert/ExpUpcomAppoint.jsx'
-
+import ChatHome from './components/Chat/ChatHome.jsx'
 
 
 const router = createBrowserRouter(
@@ -23,6 +23,7 @@ const router = createBrowserRouter(
       <Route path="login" element = {<ExpertLoginSignUp/>} /> 
         <Route path="expertprofile" element={<ExpertProfile />} />
         <Route path="appointments" element={<ExpertUpcomingAppointmentsPage />} />
+        <Route path="chat" element={<ChatHome />} />
       </Route>
       
       <Route path='user/' >
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
         <Route path="userprofile" element={<UserProfile />} />
         <Route path="usersearch" element={<UserSearch />} />
         <Route path="appointments" element={<UpcomingAppointmentsPage />} />
+        <Route path="chat" element={<ChatHome />} />
       </Route>
     </Route>
   )
