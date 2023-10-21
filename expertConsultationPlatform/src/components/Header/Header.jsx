@@ -10,13 +10,13 @@ export default function Header() {
                     </Link>
                     <div className="flex items-center lg:order-2">
                         <Link
-                            to="/expert"
+                            to="/expert/login"
                             className="bg-blue-400 hover:bg-blue-500 text-white font-bold  rounded-full focus:ring-4 focus:ring-blue-300  text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
                             Expert
                         </Link>
                         <Link
-                            to="/user"
+                            to="/user/login"
                             className="bg-blue-400 hover:bg-blue-500 text-white font-bold  rounded-full focus:ring-4 focus:ring-blue-300  text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
                             User

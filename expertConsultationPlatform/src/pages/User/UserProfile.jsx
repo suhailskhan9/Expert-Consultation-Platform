@@ -116,7 +116,7 @@
 
 
 import Sidebar, { SidebarItem } from "../../components/Sidebar";
-import { User, Search, Inbox, MessageCircle, Video, LogOut, Settings, LifeBuoy } from "lucide-react";
+import { User, Search, Inbox, MessageCircle, Video, LogOut, Settings, LifeBuoy, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLocation,useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -126,14 +126,14 @@ export default function UserProfile() {
     name: "",
     email: "",
   });
-  const location = useLocation();
-  const navigate = useNavigate();
+    const location = useLocation();
+    const navigate = useNavigate();
 
 
   const [editMode, setEditMode] = useState(false);
   const loggedInUserEmail = location.state?.email;
 
-
+const userdata = location.state
 
   useEffect(() => {    
         axios
@@ -184,27 +184,27 @@ export default function UserProfile() {
       });
   };
 
-  const handleBrowseExpertsClick = () => {
-    // Navigate to the ExpertList (Browse Experts) page
-    console.log("handleBrowseExpertsClick function called"); // Add this line
+  // const handleUserSearch = () => {
+  //   // Navigate to the ExpertList (Browse Experts) page
+  //   console.log("handleBrowseExpertsClick function called"); // Add this line
 
-    navigate('/expertcard');
-  };
+  //   navigate('usersearch');
+  // };
   
 
   return (
     <div className="flex">
       <Sidebar className="w-64">
-        <SidebarItem icon={<User size={20} />} text="Profile" active />
-        <SidebarItem onClick={handleBrowseExpertsClick} icon={<Search size={20} />} text="Browse Experts" />
-        <SidebarItem icon={<Inbox size={20} />} text="Inbox" />
-        <SidebarItem icon={<MessageCircle size={20} />} text="Chat" />
-        <SidebarItem icon={<Video size={20} />} text="Video Call" alert />
-        <SidebarItem icon={<LogOut />} text="Log Out" />
-        <hr className="my-3" />
-        <SidebarItem icon={<Settings size={20} />} text="Settings" />
-        <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
-      </Sidebar>
+  <SidebarItem icon={<User size={20} />} text="Profile" active />
+  <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch" state={userdata} />
+  <SidebarItem icon={<Inbox size={20} />} text="Inbox" to="" />
+  <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to="/user/appointments" state={userdata}/>
+  {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
+  <SidebarItem icon={<LogOut />} text="Log Out" />
+  <hr className="my-3" />
+  <SidebarItem icon={<Settings size={20} />} text="Settings" />
+  <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
+</Sidebar>
 
       <div className="flex-1 p-4">
         <h2 className="text-2xl font-semibold mb-4">User Profile</h2>
