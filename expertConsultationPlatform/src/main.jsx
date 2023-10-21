@@ -9,8 +9,8 @@ import UserLoginSignUp from './components/UserLoginSignUp/UserLoginSignUp.jsx'
 import UserProfile from './pages/User/UserProfile.jsx'
 import ExpertProfile from './pages/Expert/ExpertProfile.jsx'
 import UserSearch from './pages/User/UserSearch.jsx'
-
-
+import UpcomingAppointmentsPage from './pages/User/UserUpcomAppoint.jsx'
+import ExpertUpcomingAppointmentsPage from './pages/Expert/ExpUpcomAppoint.jsx'
 
 
 
@@ -22,12 +22,14 @@ const router = createBrowserRouter(
       <Route path='expert/'  >
       <Route path="login" element = {<ExpertLoginSignUp/>} /> 
         <Route path="expertprofile" element={<ExpertProfile />} />
+        <Route path="appointments" element={<ExpertUpcomingAppointmentsPage />} />
       </Route>
       
       <Route path='user/' >
         <Route path="login" element = {<UserLoginSignUp/>} />  
         <Route path="userprofile" element={<UserProfile />} />
         <Route path="usersearch" element={<UserSearch />} />
+        <Route path="appointments" element={<UpcomingAppointmentsPage />} />
       </Route>
     </Route>
   )

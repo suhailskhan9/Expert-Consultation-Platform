@@ -69,22 +69,17 @@ function UserSearch() {
         <div className="flex">
 
 
-        <Sidebar className="w-64">
-            <SidebarItem
-                icon = {<User size = {20} />}
-                text = "Profile"
-                to="/user/userprofile"
-                state={userdata}
-                />
-            <SidebarItem icon = {<Search size={20}/>} text="Browse Experts"  active/>
-            <SidebarItem icon = {<Inbox size={20} />} text="Inbox" />
-            <SidebarItem icon = {<MessageCircle size={20} />} text="Chat"  />
-            <SidebarItem icon = {<Video size={20} />} text="Video Call" alert />
-            <SidebarItem icon = {<LogOut  />} text="Log Out" />
-            <hr className="my-3"/>
-            <SidebarItem icon={<Settings size={20} />} text="Settings" />
-            <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
-        </Sidebar>
+            <Sidebar className="w-64">
+              <SidebarItem icon={<User size={20} />} text="Profile" state={userdata}  to="/user/userprofile" />
+              <SidebarItem icon={<Search size={20} />} text="Browse Experts"   active/>
+              <SidebarItem icon={<Inbox size={20} />} text="Inbox" to="" />
+              <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to="/user/appointments" state={userdata} />
+              {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
+              <SidebarItem icon={<LogOut />} text="Log Out" />
+              <hr className="my-3" />
+              <SidebarItem icon={<Settings size={20} />} text="Settings" />
+              <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
+            </Sidebar>
 
         <div className="flex-1 p-4">
 

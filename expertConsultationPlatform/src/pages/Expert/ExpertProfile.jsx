@@ -163,7 +163,7 @@ export default function ExpertProfile() {
 
   const location = useLocation();
   const loggedInUserEmail = location.state?.email;
-
+  const userdata = location.state
   useEffect(() => {
 
     axios
@@ -225,11 +225,11 @@ export default function ExpertProfile() {
               text="Profile"
               active
             />
-            <SidebarItem icon={<Calendar size={20} />} text="Calendar" />
-            <SidebarItem icon={<Inbox size={20} />} text="Inbox" />
-            <SidebarItem icon={<MessageCircle size={20} />} text="Chat" />
-            <SidebarItem icon={<Video size={20} />} text="Video Call" alert />
-            <SidebarItem icon={<LogOut size={20} />} text="Log Out" />
+            <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to='/expert/appointments' state={userdata}/>
+            <SidebarItem icon={<Inbox size={20} />} text="Inbox" to="" />
+
+            {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
+            <SidebarItem icon={<LogOut />} text="Log Out" />
             <hr className="my-3" />
             <SidebarItem icon={<Settings size={20} />} text="Settings" />
             <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
