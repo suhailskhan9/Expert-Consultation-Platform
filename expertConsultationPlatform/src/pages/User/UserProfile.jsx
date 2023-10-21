@@ -184,20 +184,20 @@ export default function UserProfile() {
       });
   };
 
-  const handleBrowseExpertsClick = () => {
-    // Navigate to the ExpertList (Browse Experts) page
-    console.log("handleBrowseExpertsClick function called"); // Add this line
+  // const handleUserSearch = () => {
+  //   // Navigate to the ExpertList (Browse Experts) page
+  //   console.log("handleBrowseExpertsClick function called"); // Add this line
 
-    navigate('/expertcard');
-  };
+  //   navigate('usersearch');
+  // };
   
 
   return (
     <div className="flex">
       <Sidebar className="w-64">
         <SidebarItem icon={<User size={20} />} text="Profile" active />
-        <SidebarItem onClick={handleBrowseExpertsClick} icon={<Search size={20} />} text="Browse Experts" />
-        <SidebarItem icon={<Inbox size={20} />} text="Inbox" />
+        <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch"/>
+        <SidebarItem icon={<Inbox size={20} />} text="Inbox" to=""/>
         <SidebarItem icon={<MessageCircle size={20} />} text="Chat" />
         <SidebarItem icon={<Video size={20} />} text="Video Call" alert />
         <SidebarItem icon={<LogOut />} text="Log Out" />

@@ -60,8 +60,9 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 
 const ExpertCard = ({ expert }) => {
   const { username, categories, price, availability, contact } = expert;
-
+  console.log("inside expertcard")
   return (
+   
     <div className="bg-blue-100 p-6 rounded-md shadow-md">
       <h3 className="text-xl font-semibold mb-2 text-blue-800">{username}</h3>
       <p className="text-gray-600 mb-2">{categories}</p>
@@ -80,34 +81,34 @@ const ExpertCard = ({ expert }) => {
   );
 };
 
-const ExpertList = () => {
-  const [experts, setExperts] = useState([]);
-  const location = useLocation();
-  const navigate = useNavigate();
+// const ExpertList = () => {
+//   const [experts, setExperts] = useState([]);
+//   const location = useLocation();
+//   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get('http://localhost:5000/api/experts'); // Replace with the actual URL of your backend API
-        setExperts(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Error:', error);
-        // Handle error here
-      }
-    }
+//   useEffect(() => {
+//     async function fetchData() {
+//       try {
+//         const response = await axios.get('http://localhost:5000/api/experts'); // Replace with the actual URL of your backend API
+//         setExperts(response.data);
+//         console.log(response.data);
+//       } catch (error) {
+//         console.error('Error:', error);
+//         // Handle error here
+//       }
+//     }
 
-    fetchData();
-  }, []);
+//     fetchData();
+//   }, []);
 
-  return (
-    <div>
-      {experts.map((expert) => (
-        <ExpertCard key={expert._id} expert={expert} />
-      ))}
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       {experts.map((expert) => (
+//         <ExpertCard key={expert._id} expert={expert} />
+//       ))}
+//     </div>
+//   );
+// };
 
-export default ExpertList;
+export default ExpertCard;
 

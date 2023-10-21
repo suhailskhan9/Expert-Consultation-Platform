@@ -35,11 +35,11 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
         console.log('Login successful');
         if(userType === "User"){
           
-            navigate('/userprofile',{ state: { email } })
+            navigate('/user/userprofile',{ state: { email } })
           
         }
         else{
-            navigate('/expertprofile',{ state: { email } })
+            navigate('/expert/expertprofile',{ state: { email } })
         }
       } else {
         console.log('Login failed');

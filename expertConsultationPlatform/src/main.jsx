@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import Layout from './Layout.jsx'
 import './index.css'
@@ -8,21 +8,27 @@ import ExpertLoginSignUp from './components/ExpertLoginSignUp/ExpertLoginSignUp.
 import UserLoginSignUp from './components/UserLoginSignUp/UserLoginSignUp.jsx'
 import UserProfile from './pages/User/UserProfile.jsx'
 import ExpertProfile from './pages/Expert/ExpertProfile.jsx'
-// import UserSearch from './pages/User/UserSearch.jsx'
-import ExpertCard from './components/Card/ExpertCard.jsx'
+import UserSearch from './pages/User/UserSearch.jsx'
+
+
+
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element = {<Layout/>}>
       <Route path='' element = {<Home/>}/>
 
-      <Route path='expert' element = {<ExpertLoginSignUp/>}/>
+      <Route path='expert/'  >
+      <Route path="login" element = {<ExpertLoginSignUp/>} /> 
         <Route path="expertprofile" element={<ExpertProfile />} />
+      </Route>
       
-      
-      <Route path='user' element = {<UserLoginSignUp/>}/>
-      <Route path="userprofile" element={<UserProfile />} />
-      <Route path="expertcard" element={<ExpertCard />} />
+      <Route path='user/' >
+        <Route path="login" element = {<UserLoginSignUp/>} />  
+        <Route path="userprofile" element={<UserProfile />} />
+        <Route path="usersearch" element={<UserSearch />} />
+      </Route>
     </Route>
   )
 )
