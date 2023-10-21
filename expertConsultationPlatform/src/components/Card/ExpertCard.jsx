@@ -85,23 +85,66 @@ const ExpertCard = ({ expert }) => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center">
-          <div className="bg-black opacity-50 fixed "></div>
-          <div className="modal bg-white p-6 rounded-md">
-            <h2 className="text-2xl font-semibold mb-4">{`Book an appointment with ${username}`}</h2>
-            
-            {/* Add your appointment booking, call, and chat options here */}
-            {/* Display available slots */}
-            
-            <button
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
-              onClick={closeModal}
-            >
-              Close
-            </button>
-          </div>
+  <div className="fixed inset-0 flex items-center justify-center">
+    <div className="bg-black opacity-50 fixed "></div>
+    <div className="modal bg-white p-6 rounded-md">
+      <h2 className="text-2xl font-semibold mb-4">{`Book an appointment with ${username}`}</h2>
+      
+      {/* Display available slots */}
+      <div className="mb-4">
+        <p className="text-lg font-semibold mb-2">Available Slots:</p>
+        {/* Add logic to display available slots here */}
+        <ul>
+          <li>Slot 1: October 25, 2023, 10:00 AM - 11:00 AM</li>
+          <li>Slot 2: October 26, 2023, 2:00 PM - 3:00 PM</li>
+          {/* Add more slots as needed */}
+        </ul>
+      </div>
+
+      {/* Display pricing for call and chat */}
+      <div className="mb-4">
+        <p className="text-lg font-semibold mb-2">Pricing:</p>
+        <p>Call: $20 per 30 minutes</p>
+        <p>Chat: $10 per 30 minutes</p>
+        {/* Add more pricing information as needed */}
+      </div>
+
+      {/* Form to book a slot */}
+      <form>
+        <div className="mb-4">
+          <label htmlFor="selectedSlot" className="block text-sm font-medium text-gray-700">
+            Select a Slot:
+          </label>
+          <select id="selectedSlot" name="selectedSlot" className="mt-1 p-2 border rounded-md">
+            {/* Populate the options dynamically based on available slots */}
+            <option value="slot1">October 25, 2023, 10:00 AM - 11:00 AM</option>
+            <option value="slot2">October 26, 2023, 2:00 PM - 3:00 PM</option>
+            {/* Add more options as needed */}
+          </select>
         </div>
-      )}
+        
+        {/* Add other form fields if needed */}
+        
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+        >
+          Book Slot
+        </button>
+      </form>
+
+      {/* Add other options like additional services, etc. */}
+      
+      <button
+        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md mt-2"
+        onClick={closeModal}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
