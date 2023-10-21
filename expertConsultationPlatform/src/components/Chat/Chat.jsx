@@ -144,6 +144,7 @@ function Chat({ socket, username, room }) {
       </div>
       <div className="chat-footer">
         <input
+          className="chat-input"
           type="text"
           value={currentMessage}
           placeholder="message"
