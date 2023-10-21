@@ -63,6 +63,8 @@ function UserSearch() {
       fetchData();
     }, []);
   
+  const location = useLocation();
+  const userData = location.state
     return (
         <div className="flex">
 
@@ -72,6 +74,7 @@ function UserSearch() {
                 icon = {<User size = {20} />}
                 text = "Profile"
                 to="/user/userprofile"
+                state={userData}
                 />
             <SidebarItem icon = {<Search size={20}/>} text="Browse Experts"  active/>
             <SidebarItem icon = {<Inbox size={20} />} text="Inbox" />

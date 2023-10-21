@@ -55,7 +55,7 @@ export default function Sidebar({ children }) {
     )
   }
 
-export function SidebarItem({ icon, text, active, alert, to }) {
+export function SidebarItem({ icon, text, active, alert, to, state }) {
     const { expanded } = useContext(SidebarContext)
     const content = (<li
     className={`
@@ -99,5 +99,5 @@ export function SidebarItem({ icon, text, active, alert, to }) {
     )}
   </li>
   )
-  return to ? <Link to={to}>{content}</Link> : content;
+    return to ? <Link to={to} state={state}>{content}</Link> : content;
   }
