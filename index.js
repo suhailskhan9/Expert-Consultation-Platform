@@ -168,7 +168,7 @@ app.post('/user/login', async (req, res) => {
     try {
       const updatedUser = await User.findOneAndUpdate({ email: email }, {
         $set: {
-          username: updatedUserData.username, // Access username from the request body
+          username: updatedUserData.name, // Access username from the request body
           // Add more fields as needed
         }
       }, { new: true });

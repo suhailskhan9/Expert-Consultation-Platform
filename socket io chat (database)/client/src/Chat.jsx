@@ -8,7 +8,7 @@ function Chat({ socket, username, room }) {
 
   useEffect(() => {
     // Emit the "user_connect" event to request chat history when the user connects
-    socket.emit("user_connect", username , room);
+    socket.emit("user_connect_history", username , room);
 
     // Handle the "chat_history" event to display chat history
     socket.on("chat_history", (chatHistory) => {
@@ -52,11 +52,12 @@ function Chat({ socket, username, room }) {
           author: username,
           fileName,
           fileData,
+          date: Date.now(),
         });
       };
 
       reader.readAsDataURL(selectedFile);
-      setSelectedFile(null);
+      // setSelectedFile(null);
     }
   }
 
@@ -75,6 +76,7 @@ function Chat({ socket, username, room }) {
           time: `${new Date().getHours()}:${new Date().getMinutes()}`,
           isUser: false,
           date: Date.now(),
+          isFile: true, // Add an "isFile" property to indicate it's a file
         },
       ]);
     });
@@ -121,8 +123,9 @@ function Chat({ socket, username, room }) {
                     {messageContent.isFile ? (
                       <a
                         href="#"
-                        onClick={() => downloadFile(messageContent.message, messageContent.fileName)}
-                      >
+                        onClick={() =>
+                          downloadFile(messageContent.message, messageContent.fileName)
+                        }                      >
                         {messageContent.fileName}
                       </a>
                     ) : (
@@ -165,7 +168,7 @@ function Chat({ socket, username, room }) {
             }
           }}
         />
-        <button onClick={sendFile}>&#9658;</button>
+        <button onClick={() => { sendMessage(); sendFile(); }}>&#9658;</button>
       </div>
     </div>
   );
