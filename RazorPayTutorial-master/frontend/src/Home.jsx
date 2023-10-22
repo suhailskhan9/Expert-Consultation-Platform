@@ -32,19 +32,19 @@ console.log(order);
             currency: "INR",
             name: "XpertConsult",
             description: "Tutorial of RazorPay",
-            image: "https://avatars.githubusercontent.com/u/25058652?v=4",
+            image: "https://cdn1.vectorstock.com/i/1000x1000/39/55/expert-advice-consulting-service-business-help-vector-20513955.jpg",
             order_id: order.id,
             callback_url: "http://localhost:4000/api/paymentverification",
-            prefill: {
-                name: "Gaurav Kumar",
-                email: "gaurav.kumar@example.com",
-                contact: "9999999999"
-            },
+            // prefill: {
+            //     name: "Gaurav Kumar",
+            //     email: "gaurav.kumar@example.com",
+            //     contact: "9999999999"
+            // },
             notes: {
                 "address": "Razorpay Corporate Office"
             },
             theme: {
-                "color": "#121212"
+                "color": "#3B82D9"
             }
         };
         const razor = new window.Razorpay(options);
