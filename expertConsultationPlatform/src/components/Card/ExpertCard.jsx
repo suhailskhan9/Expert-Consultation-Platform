@@ -59,13 +59,19 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 
-const ExpertCard = ({ expert,onBookAppointmentClick, userEmail }) => {
-  const { username, categories, price, availability, contact } = expert;
+const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
+  const { _id , username, categories, price, availability, contact} = expert;
+  const location = useLocation();
+  const userEmail = userdata?.email;
   const [isModalOpen, setModalOpen] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([]);
-  let userId,expertId;
-  const location = useLocation();
-  const userdata = location.state
+  const [selectedSlot, setSelectedSlot] = useState('');
+  console.log(expert)
+  const [userId, setUserId] = useState(null);
+  let expertId;
+  expertId = _id;
+  console.log(expertId)
+
   // console.log(userdata)
   const [slots, setSlots] = useState([]);
   
@@ -73,11 +79,10 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userEmail }) => {
     // Call the callback function to handle the booking action
     onBookAppointmentClick(expert);
     setModalOpen(true);
+    setSelectedSlot('')
     // const userId = props.userId;
 
   // Extract expertId from expert object
-  expertId = expert._id;
-    console.log(expertId)
     console.log(userEmail)
 
     try {
@@ -85,7 +90,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userEmail }) => {
       // setUserData(response.data);
      const userData = response.data;
      if (userData.length > 0 && userData[0]._id) {
-      userId = userData[0]._id;
+      setUserId(userData[0]._id);
       console.log('User ID:', userId);
   
       // Now you have the userId, and you can proceed to create the appointment with this userId.
@@ -153,15 +158,15 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userEmail }) => {
   
 
   useEffect(() => {
-    console.log('Expert Availability:', expert.availability);
+    console.log('Expert Availability:', availability);
   
     // Generate slots based on expert's availability
-    if (expert.availability) {
-      const slots = generateSlots(expert.availability);
+    if (availability) {
+      const slots = generateSlots(availability);
       console.log('Available Slots:', slots);
       setSlots(slots);
     }
-  }, [expert.availability]); 
+  }, [availability]); 
   
   
   // const bookedSlots = [];
@@ -178,8 +183,8 @@ const availableSlots = generateSlots(availability, bookedSlots);
   console.log(userId)
   console.log(expertId)
   // console.log(appointmentSlot)
-  const bookAppointment = async (userId, expertId, appointmentSlot) => {
-    e.preventDefault(); 
+  const bookAppointment = async (expertId, appointmentSlot) => {
+
     try {
       console.log(userId)
 console.log(expertId)
@@ -274,12 +279,19 @@ console.log(appointmentSlot)
       </div>
 
       {/* Form to book a slot */}
-      <form  onSubmit={()=>bookAppointment(userId, expertId, selectedSlot)}>
+      <form  onSubmit={(e)=>{
+        e.preventDefault()
+        bookAppointment(expertId, selectedSlot)
+        }}>
         <div className="mb-4">
           <label htmlFor="selectedSlot" className="block text-sm font-medium text-gray-700">
             Select a Slot:
           </label>
-          <select id="selectedSlot" name="selectedSlot" className="mt-1 p-2 border rounded-md">
+          <select 
+          id="selectedSlot" 
+          name="selectedSlot" 
+          className="mt-1 p-2 border rounded-md"
+          onChange={(e) => setSelectedSlot(e.target.value)}>
       <option value="" disabled>
         Select a Slot
       </option>

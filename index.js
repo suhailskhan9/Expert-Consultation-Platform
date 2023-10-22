@@ -58,21 +58,21 @@ const appointmentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // If you have a User model
-    required: true,
+
   },
   expertId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Expert', // If you have an Expert model
-    required: true,
+
   },
   appointmentSlot: {
     type: String, // You can store the slot as a string
-    required: true,
+
   },
   status: {
     type: String,
     enum: ['free', 'booked'], // Status can be 'free' or 'booked'
-    required: true,
+
   },
   bookedDateTime: {
     type: Date,
