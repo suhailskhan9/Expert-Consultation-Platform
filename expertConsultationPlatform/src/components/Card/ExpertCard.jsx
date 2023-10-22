@@ -53,19 +53,183 @@
 
 
 // ExpertCard.jsx
-import React, { useState } from 'react';
+import { ContactSupport } from '@material-ui/icons';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
-const ExpertCard = ({ expert }) => {
+
+const ExpertCard = ({ expert,onBookAppointmentClick, userEmail }) => {
   const { username, categories, price, availability, contact } = expert;
   const [isModalOpen, setModalOpen] = useState(false);
-
-  const handleBookAppointment = () => {
+  const [bookedSlots, setBookedSlots] = useState([]);
+  let userId,expertId;
+  const location = useLocation();
+  const userdata = location.state
+  // console.log(userdata)
+  const [slots, setSlots] = useState([]);
+  
+  const handleBookAppointment = async() => {
+    // Call the callback function to handle the booking action
+    onBookAppointmentClick(expert);
     setModalOpen(true);
+    // const userId = props.userId;
+
+  // Extract expertId from expert object
+  expertId = expert._id;
+    console.log(expertId)
+    console.log(userEmail)
+
+    try {
+      const response = await axios.get(`http://localhost:5000/getUserData?email=${userEmail}`);
+      // setUserData(response.data);
+     const userData = response.data;
+     if (userData.length > 0 && userData[0]._id) {
+      userId = userData[0]._id;
+      console.log('User ID:', userId);
+  
+      // Now you have the userId, and you can proceed to create the appointment with this userId.
+    } else {
+      console.error('User data does not contain userId.');
+      // Handle the case where userId is not available in the response
+    }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      // Handle the error appropriately
+    }
+  };
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'
+  ];
+  
+  const generateSlots = (availability, bookedSlots = []) => {
+    const slots = [];
+  
+    console.log('Availability:', availability); // Add this line
+  
+    // Check if availability is not empty and is a string
+    if (availability && typeof availability === 'string') {
+      // Split the availability string by ' - ' and trim to remove extra spaces
+      const [startTime, endTime] = availability.split('-').map(time => time.trim());
+  
+      // console.log('StartTime:', startTime); // Add this line
+      // console.log('EndTime:', endTime); // Add this line
+  
+      // Check if both start and end times are defined
+      if (startTime && endTime) {
+        // Extract the start and end hours
+        const startHour = parseInt(startTime.split(':')[0], 10);
+        const endHour = parseInt(endTime.split(':')[0], 10);
+  
+        // Define the current date
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = currentDate.toLocaleString('en-US', { month: 'long' });
+        const day = currentDate.getDate();
+        const formattedDate = `${month} ${day}, ${year}`;
+  
+        for (let hour = startHour; hour < endHour; hour++) {
+          console.log('Entering the loop for hour', hour);
+
+          const currentHourLabel = hour >= 12 ? 'PM' : 'AM';
+          const slot = `${formattedDate}, ${hour % 12 || 12}:00 ${currentHourLabel} - ${(hour + 1) % 12 || 12}:00 ${currentHourLabel}`;
+          // Check if the slot is not in the list of bookedSlots
+          if (!bookedSlots.includes(slot)) {
+            slots.push(slot);
+          }
+        }
+      } else {
+        console.error('Invalid availability format:', availability);
+      }
+    } else {
+      console.error('Invalid availability format:', availability);
+    }
+  
+    console.log('Generated Slots:', slots); // Add this line
+  
+    return slots;
+  };
+  
+
+  useEffect(() => {
+    console.log('Expert Availability:', expert.availability);
+  
+    // Generate slots based on expert's availability
+    if (expert.availability) {
+      const slots = generateSlots(expert.availability);
+      console.log('Available Slots:', slots);
+      setSlots(slots);
+    }
+  }, [expert.availability]); 
+  
+  
+  // const bookedSlots = [];
+
+// Call generateSlots to get the available slots
+const availableSlots = generateSlots(availability, bookedSlots);
+// console.log(availableSlots)
+  
+ 
+  // useEffect(() => {
+  //   // Generate slots based on expert's availability
+  //   setSlots(generateSlots(expert.availability));
+  // }, [expert.availability]);
+  console.log(userId)
+  console.log(expertId)
+  // console.log(appointmentSlot)
+  const bookAppointment = async (userId, expertId, appointmentSlot) => {
+    e.preventDefault(); 
+    try {
+      console.log(userId)
+console.log(expertId)
+console.log(appointmentSlot)
+      const response = await axios.post('http://localhost:5000/book-appointment', {
+        userId,
+        expertId,
+        appointmentSlot,
+      });
+      console.log(response.data.message);
+
+      updateAppointmentStatus();
+
+      // After booking, you can handle any necessary updates
+      // For example, refreshing the list of available slots, etc.
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  const updateAppointmentStatus = async () => {
+    try {
+      for (const slot of bookedSlots) {
+        const [slotDate, slotTime] = slot.split(', ');
+        const slotDateTime = new Date(slotDate + ' ' + slotTime);
+        const currentDateTime = new Date();
+    
+        if (slotDateTime <= currentDateTime) {
+          const response = await axios.post('http://localhost:5000/update-appointment-status', {
+            slot,
+          });
+  
+          // Update the local bookedSlots array
+          const updatedBookedSlots = bookedSlots.filter(bookedSlot => bookedSlot !== slot);
+          setBookedSlots(updatedBookedSlots);
+          
+          console.log(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  
+  
   const closeModal = () => {
     setModalOpen(false);
   };
+
 
   return (
     <div className="bg-blue-100 p-6 rounded-md shadow-md">
@@ -110,15 +274,20 @@ const ExpertCard = ({ expert }) => {
       </div>
 
       {/* Form to book a slot */}
-      <form>
+      <form  onSubmit={()=>bookAppointment(userId, expertId, selectedSlot)}>
         <div className="mb-4">
           <label htmlFor="selectedSlot" className="block text-sm font-medium text-gray-700">
             Select a Slot:
           </label>
           <select id="selectedSlot" name="selectedSlot" className="mt-1 p-2 border rounded-md">
-            {/* Populate the options dynamically based on available slots */}
-            <option value="slot1">October 25, 2023, 10:00 AM - 11:00 AM</option>
-            <option value="slot2">October 26, 2023, 2:00 PM - 3:00 PM</option>
+      <option value="" disabled>
+        Select a Slot
+      </option>
+      {availableSlots.map((slot, index) => ( // Change 'slots' to 'availableSlots'
+        <option key={index} value={slot}>
+          {slot}
+        </option>
+            ))}
             {/* Add more options as needed */}
           </select>
         </div>
@@ -128,6 +297,7 @@ const ExpertCard = ({ expert }) => {
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+         
         >
           Book Slot
         </button>

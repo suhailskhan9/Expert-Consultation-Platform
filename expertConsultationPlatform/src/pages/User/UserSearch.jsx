@@ -31,6 +31,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 function UserSearch() {
     const [searchTerm, setSearchTerm] = useState('');
     const [experts, setExperts] = useState([]);
+    const [selectedExpert, setSelectedExpert] = useState(null);
   
     const handleSearch = async () => {
       // Perform search logic based on searchTerm
@@ -62,9 +63,16 @@ function UserSearch() {
   console.log("Expert List called")
       fetchData();
     }, []);
+
+    const handleBookAppointmentClick = (expertData) => {
+      setSelectedExpert(expertData);
+      // console.log(expertData)
+    };
   
   const location = useLocation();
   const userdata = location.state
+  console.log(userdata)
+  
     return (
         <div className="flex">
 
@@ -73,7 +81,7 @@ function UserSearch() {
               <SidebarItem icon={<User size={20} />} text="Profile" state={userdata}  to="/user/userprofile" />
               <SidebarItem icon={<Search size={20} />} text="Browse Experts"   active/>
               <SidebarItem icon={<Inbox size={20} />} text="Inbox" to="" />
-              <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to="/user/appointments" state={userdata} />
+              <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to="/user/appointments" state={userdata? userdata:{}} />
               {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
               <SidebarItem icon={<LogOut />} text="Log Out" />
               <hr className="my-3" />
@@ -103,8 +111,13 @@ function UserSearch() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
 
            {experts.map((expert) => (
-            <ExpertCard key={expert._id} expert={expert} />
+            <ExpertCard key={expert._id} 
+            expert={expert} 
+            onBookAppointmentClick={handleBookAppointmentClick}
+            userEmail={userdata?.email}
+            />
           ))}
+          
         </div>
 
     </div>

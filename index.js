@@ -54,6 +54,33 @@ expertSchema.add({
   languages:String,
 });
 
+const appointmentSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // If you have a User model
+    required: true,
+  },
+  expertId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Expert', // If you have an Expert model
+    required: true,
+  },
+  appointmentSlot: {
+    type: String, // You can store the slot as a string
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['free', 'booked'], // Status can be 'free' or 'booked'
+    required: true,
+  },
+  bookedDateTime: {
+    type: Date,
+  },
+});
+
+
+
 // const roomSchema = new mongoose.Schema({
 //   roomID: String,
 //   users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
@@ -83,6 +110,7 @@ const fileSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 const Expert = mongoose.model('Expert', expertSchema);
+const Appointment = mongoose.model('Appointment', appointmentSchema);
 // const Room = mongoose.model('Room', roomSchema);
 const Message = mongoose.model("Message", messageSchema);
 const File = mongoose.model("File", fileSchema);
@@ -170,7 +198,7 @@ app.post('/user/login', async (req, res) => {
       // Fetch expert data based on the email query parameter
       const email = req.query.email;
       const users = await User.find({ email });
-  
+      // console.log(users)
       // Send the expert data as a JSON response
       res.json(users);
     } catch (error) {
@@ -235,7 +263,7 @@ app.post('/user/login', async (req, res) => {
   app.put("/updateExpertData/:email", async (req, res) => {
     const email = req.params.email; // Get the email from the URL parameter
     const updatedExpertData = req.body; // This is the data sent in the request body
-  
+  console.log(updatedExpertData)
     try {
       const updatedExpert = await Expert.findOneAndUpdate({ email: email }, {
         $set: {
@@ -248,7 +276,8 @@ app.post('/user/login', async (req, res) => {
           // Add more fields as needed
         }
       }, { new: true });
-  
+      // console.log('Updated Expert Data:', updatedExpert);
+
       if (!updatedExpert) {
         return res.status(404).json({ error: "Expert not found" });
       }
@@ -338,6 +367,60 @@ app.post('/user/login', async (req, res) => {
         .catch((err) => {
           console.error('Error fetching chat history:', err);
         });
+     });
+    
+     app.post('/book-appointment', async (req, res) => {
+      const { userId, expertId, appointmentSlot } = req.body;
+    
+      try {
+        // Create a new appointment record
+        const newAppointment = new Appointment({
+          userId,
+          expertId,
+          appointmentSlot,
+          status: 'booked', // Set the status to 'booked' when booking
+          bookedDateTime: new Date(),
+        });
+    
+        // Save the new appointment
+        await newAppointment.save();
+    
+        return res.status(200).json({ message: 'Appointment booked successfully' });
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    
+    // Route to update appointment status
+    app.post('/update-appointment-status', async (req, res) => {
+      try {
+        // Get the current time
+        const currentTime = new Date();
+    
+        // Find and update appointments with status "booked" that have passed
+        await Appointment.updateMany(
+          {
+            status: 'booked',
+            bookedDateTime: { $lt: currentTime },
+          },
+          { $set: { status: 'free', userId: null, bookedDateTime: null } } // Change status to 'free' when the time has passed
+        );
+    
+        // Find and update appointments with status "free" that are in the future
+        await Appointment.updateMany(
+          {
+            status: 'free',
+            bookedDateTime: { $gte: currentTime },
+          },
+          { $set: { userId: null, bookedDateTime: null } } // Clear userId and bookedDateTime for future 'free' appointments
+        );
+    
+        return res.status(200).json({ message: 'Appointment statuses updated' });
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
     });
     
   

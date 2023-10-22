@@ -80,6 +80,7 @@ const UpcomingAppointmentsPage = () => {
   ];
   const location = useLocation();
   const userdata = location.state
+  // console.log(userdata);
   const navigate = useNavigate();
 
   const handleStartChat = () => {

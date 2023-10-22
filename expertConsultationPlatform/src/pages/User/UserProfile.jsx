@@ -131,9 +131,10 @@ export default function UserProfile() {
 
 
   const [editMode, setEditMode] = useState(false);
+  const userdata = location.state
+console.log(userdata)
   const loggedInUserEmail = location.state?.email;
-
-const userdata = location.state
+// console.log(userdata);
 
   useEffect(() => {    
         axios
@@ -142,9 +143,9 @@ const userdata = location.state
         // Check if the response is an array and has at least one element
         if (Array.isArray(response.data) && response.data.length > 0) {
           const userData = response.data[0]; // Access the first element
-          console.log(userData);
-          console.log(userData.username);
-          console.log(userData.email);
+          // console.log(userData);
+          // console.log(userData.username);
+          // console.log(userData.email);
           setFormData({
             name: userData.username,
             email: userData.email,
