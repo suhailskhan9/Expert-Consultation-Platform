@@ -75,6 +75,19 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
   // console.log(userdata)
   const [slots, setSlots] = useState([]);
   
+  useEffect(() => {
+    console.log('Expert Availability:', availability);
+  
+    // Generate slots based on expert's availability
+    if (availability) {
+      const slots = generateSlots(availability,bookedSlots);
+      console.log('Available Slots:', slots);
+      setSlots(slots);
+    }
+  }, [availability]); 
+
+  
+
   const handleBookAppointment = async() => {
     // Call the callback function to handle the booking action
     onBookAppointmentClick(expert);
@@ -135,7 +148,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
         const formattedDate = `${month} ${day}, ${year}`;
   
         for (let hour = startHour; hour < endHour; hour++) {
-          console.log('Entering the loop for hour', hour);
+          // console.log('Entering the loop for hour', hour);
 
           const currentHourLabel = hour >= 12 ? 'PM' : 'AM';
           const slot = `${formattedDate}, ${hour % 12 || 12}:00 ${currentHourLabel} - ${(hour + 1) % 12 || 12}:00 ${currentHourLabel}`;
@@ -151,29 +164,32 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       console.error('Invalid availability format:', availability);
     }
   
-    console.log('Generated Slots:', slots); // Add this line
+    // console.log('Generated Slots:', slots); // Add this line
   
     return slots;
   };
+  const availableSlots = generateSlots(availability, bookedSlots);
+  console.log("available:",availableSlots)
   
+ 
 
-  useEffect(() => {
-    console.log('Expert Availability:', availability);
+  // useEffect(() => {
+  //   console.log('Expert Availability:', availability);
   
-    // Generate slots based on expert's availability
-    if (availability) {
-      const slots = generateSlots(availability);
-      console.log('Available Slots:', slots);
-      setSlots(slots);
-    }
-  }, [availability]); 
+  //   // Generate slots based on expert's availability
+  //   if (availability) {
+  //     const slots = generateSlots(availability,bookedSlots);
+  //     console.log('Available Slots:', slots);
+  //     setSlots(slots);
+  //   }
+  // }, [availability]); 
   
   
   // const bookedSlots = [];
 
 // Call generateSlots to get the available slots
-const availableSlots = generateSlots(availability, bookedSlots);
-// console.log(availableSlots)
+// const availableSlots = generateSlots(availability, bookedSlots);
+// console.log("available:",availableSlots)
   
  
   // useEffect(() => {
@@ -186,15 +202,17 @@ const availableSlots = generateSlots(availability, bookedSlots);
   const bookAppointment = async (expertId, appointmentSlot) => {
 
     try {
-      console.log(userId)
-console.log(expertId)
-console.log(appointmentSlot)
+    console.log(userId)
+    console.log(expertId)
+    console.log(appointmentSlot)
       const response = await axios.post('http://localhost:5000/book-appointment', {
         userId,
         expertId,
         appointmentSlot,
       });
       console.log(response.data.message);
+
+      setBookedSlots((prevBookedSlots) => [...prevBookedSlots, appointmentSlot]);
 
       updateAppointmentStatus();
 
@@ -220,7 +238,7 @@ console.log(appointmentSlot)
           // Update the local bookedSlots array
           const updatedBookedSlots = bookedSlots.filter(bookedSlot => bookedSlot !== slot);
           setBookedSlots(updatedBookedSlots);
-          
+
           console.log(response.data.message);
         }
       }
@@ -229,6 +247,7 @@ console.log(appointmentSlot)
     }
   };
   
+  console.log(bookedSlots);
   
   
   const closeModal = () => {
@@ -295,11 +314,17 @@ console.log(appointmentSlot)
       <option value="" disabled>
         Select a Slot
       </option>
-      {availableSlots.map((slot, index) => ( // Change 'slots' to 'availableSlots'
-        <option key={index} value={slot}>
-          {slot}
-        </option>
-            ))}
+      {availableSlots.map((slot, index) => {
+        // Check if the slot is not in the list of bookedSlots
+        if (!bookedSlots.includes(slot)) {
+          return (
+            <option key={index} value={slot}>
+              {slot}
+            </option>
+          );
+        }
+        return null; // Skip rendering this slot
+      })}
             {/* Add more options as needed */}
           </select>
         </div>
