@@ -13,6 +13,8 @@ import UpcomingAppointmentsPage from './pages/User/UserUpcomAppoint.jsx'
 import ExpertUpcomingAppointmentsPage from './pages/Expert/ExpUpcomAppoint.jsx'
 import ChatHome from './components/Chat/ChatHome.jsx'
 import App from './components/Video/App.jsx'
+import reportWebVitals from './components/Video/reportWebVitals.js'
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,6 +45,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+      <RouterProvider router={router}/>
   </React.StrictMode>,
 )
+
+reportWebVitals();
