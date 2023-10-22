@@ -12,7 +12,7 @@ import UserSearch from './pages/User/UserSearch.jsx'
 import UpcomingAppointmentsPage from './pages/User/UserUpcomAppoint.jsx'
 import ExpertUpcomingAppointmentsPage from './pages/Expert/ExpUpcomAppoint.jsx'
 import ChatHome from './components/Chat/ChatHome.jsx'
-
+import App from './components/Video/App.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +24,7 @@ const router = createBrowserRouter(
         <Route path="expertprofile" element={<ExpertProfile />} />
         <Route path="appointments" element={<ExpertUpcomingAppointmentsPage />} />
         <Route path="chat" element={<ChatHome />} />
+        <Route path="video/*" element={<App />} />
       </Route>
       
       <Route path='user/' >
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
         <Route path="usersearch" element={<UserSearch />} />
         <Route path="appointments" element={<UpcomingAppointmentsPage />} />
         <Route path="chat" element={<ChatHome />} />
+        <Route path="video/*" element={<App />} />
       </Route>
     </Route>
   )
