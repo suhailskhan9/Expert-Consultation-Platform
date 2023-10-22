@@ -27,9 +27,11 @@ const ExpertUpcomingAppointmentsPage = () => {
   const navigate = useNavigate();
 
   const handleStartChat = () => {
-    navigate('/user/chat');
+    navigate('/expert/chat');
   };
-
+  const handleStartvideo = () => {
+    navigate('/expert/video');
+  };
   return (
 <div className="flex">
       <Sidebar className="w-64">
@@ -59,7 +61,7 @@ const ExpertUpcomingAppointmentsPage = () => {
               </div>
               {/* Add video and chat options here */}
               <div className="mt-2">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2" onClick={handleStartvideo}>
                   Start Video Call
                 </button>
                 <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md" onClick={handleStartChat}>
