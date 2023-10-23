@@ -66,15 +66,21 @@ const UpcomingAppointmentsPage = () => {
   const staticAppointments = [
     {
       id: 1,
-      expertName: 'John Doe',
-      date: 'October 25, 2023',
+      expertName: 'Dr John Doe',
+      date: 'October 23, 2023',
       time: '10:00 AM - 11:00 AM',
     },
     {
       id: 2,
-      expertName: 'Jane Smith',
+      expertName: 'Alice Smith',
       date: 'October 26, 2023',
       time: '2:00 PM - 3:00 PM',
+    },
+    {
+      id: 3,
+      expertName: 'Ritik Shukla',
+      date: 'October 26, 2023',
+      time: '8:00 AM - 9:00 AM',
     },
     // Add more sample appointments as needed
   ];
