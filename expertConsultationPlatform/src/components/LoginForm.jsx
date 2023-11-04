@@ -31,6 +31,7 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
       }
 
       if (response.status === 200) {
+       
         // Successful login, you can redirect or perform other actions
         console.log('Login successful');
         if(userType === "User"){
@@ -41,11 +42,13 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
         else{
             navigate('/expert/expertprofile',{ state: { email } })
         }
+        window.alert(response.data.message);
       } else {
         console.log('Login failed');
       }
     } catch (error) {
       console.error('Error:', error);
+      
     }
   };
 

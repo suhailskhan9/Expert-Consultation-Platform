@@ -211,7 +211,8 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
         appointmentSlot,
       });
       console.log(response.data.message);
-
+      
+    window.alert(response.data.message);
       setBookedSlots((prevBookedSlots) => [...prevBookedSlots, appointmentSlot]);
 
       updateAppointmentStatus();
@@ -279,21 +280,13 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       <h2 className="text-2xl font-semibold mb-4">{`Book an appointment with ${username}`}</h2>
       
       {/* Display available slots */}
-      <div className="mb-4">
-        <p className="text-lg font-semibold mb-2">Available Slots:</p>
-        {/* Add logic to display available slots here */}
-        <ul>
-          <li>Slot 1: October 25, 2023, 10:00 AM - 11:00 AM</li>
-          <li>Slot 2: October 26, 2023, 2:00 PM - 3:00 PM</li>
-          {/* Add more slots as needed */}
-        </ul>
-      </div>
+      
 
       {/* Display pricing for call and chat */}
       <div className="mb-4">
         <p className="text-lg font-semibold mb-2">Pricing:</p>
-        <p>Call: $20 per 30 minutes</p>
-        <p>Chat: $10 per 30 minutes</p>
+        <p>{`Call: ${price} per 60 minutes`}</p>
+        <p>{`Chat: ${price} per 60 minutes`}</p>
         {/* Add more pricing information as needed */}
       </div>
 
