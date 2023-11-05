@@ -405,12 +405,6 @@ app.post('/user/login', async (req, res) => {
 //   });
 // });
 
-
-
-
-
-
-
      app.post('/book-appointment', async (req, res) => {
       const { userId, expertId, appointmentSlot } = req.body;
     
@@ -465,7 +459,25 @@ app.post('/user/login', async (req, res) => {
       }
     });
     
-  
+    app.get('/booked-appointments', async (req, res) => {
+      try {
+        // Get the user ID from the request query parameters
+        const userId = req.query.userId;
+    console.log(userId)
+        // Fetch booked appointments for the given user ID with a status of 'booked'
+        const bookedAppointments = await Appointment.find({ userId, status: 'booked' })
+          .populate('expertId') // Populate the 'expertId' reference
+          .select('expertId date timeSlot -_id'); // Select only the desired fields
+    
+        // Return the booked appointments as a JSON response
+        res.json(bookedAppointments);
+        console.log(bookedAppointments)
+      } catch (error) {
+        console.error('Error fetching booked appointments:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id);
     });

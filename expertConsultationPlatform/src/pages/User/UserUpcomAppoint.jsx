@@ -54,40 +54,81 @@
 // export default UpcomingAppointmentsPage;
 
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar,{SidebarItem} from '../../components/Sidebar';
 import { User, Search, Inbox, MessageCircle, Video, LogOut, Settings, LifeBuoy, Calendar } from "lucide-react";
 import { useLocation } from 'react-router-dom';
 import { useNavigate, Navigate } from 'react-router-dom';
-
+import axios from 'axios';
 
 const UpcomingAppointmentsPage = () => {
   // Sample static data for upcoming appointments
-  const staticAppointments = [
-    {
-      id: 1,
-      expertName: 'Dr John Doe',
-      date: 'October 23, 2023',
-      time: '10:00 AM - 11:00 AM',
-    },
-    {
-      id: 2,
-      expertName: 'Alice Smith',
-      date: 'October 26, 2023',
-      time: '2:00 PM - 3:00 PM',
-    },
-    {
-      id: 3,
-      expertName: 'Ritik Shukla',
-      date: 'October 26, 2023',
-      time: '8:00 AM - 9:00 AM',
-    },
+  // const staticAppointments = [
+    // {
+    //   id: 1,
+    //   expertName: 'Dr John Doe',
+    //   date: 'October 23, 2023',
+    //   time: '10:00 AM - 11:00 AM',
+    // },
+    // {
+    //   id: 2,
+    //   expertName: 'Alice Smith',
+    //   date: 'October 26, 2023',
+    //   time: '2:00 PM - 3:00 PM',
+    // },
+    // {
+    //   id: 3,
+    //   expertName: 'Ritik Shukla',
+    //   date: 'October 26, 2023',
+    //   time: '8:00 AM - 9:00 AM',
+    // },
     // Add more sample appointments as needed
-  ];
+  // ];
+
   const location = useLocation();
   const userdata = location.state
   // console.log(userdata);
   const navigate = useNavigate();
+
+  
+  const [userId, setUserId] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    // Fetch user ID based on the user's email
+    async function fetchUserId() {
+      try {
+        const response = await axios.get(`http://localhost:5000/getUserData?email=${userdata.email}`);
+        const userData = response.data;
+        if (userData && userData.length > 0 && userData[0]._id) {
+          setUserId(userData[0]._id);
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+      }
+    }
+    console.log(userId)
+
+    
+    // Fetch booked appointments once we have the user's ID
+    async function fetchBookedAppointments() {
+      try {
+        console.log(userId)
+        if (userId) {
+          console.log("fetched")
+
+          const response = await axios.get(`http://localhost:5000/booked-appointments?userId=${userId}`);
+          const bookedAppointments = response.data;
+          setAppointments(bookedAppointments);
+        }
+      } catch (error) {
+        console.error('Error fetching booked appointments:', error);
+      }
+    }
+
+    fetchUserId();
+    fetchBookedAppointments();
+  }, [userdata]);
 
   const handleStartChat = () => {
     navigate('/user/chat');
@@ -112,12 +153,12 @@ const UpcomingAppointmentsPage = () => {
       <div className="flex-1 p-4">
       <div>
       <h2 className="text-2xl font-semibold mb-4">Upcoming Appointments</h2>
-      {staticAppointments.length === 0 ? (
+      {appointments.length === 0 ? (
         <p>No upcoming appointments.</p>
       ) : (
         <ul>
-          {staticAppointments.map((appointment) => (
-            <li key={appointment.id}>
+          {appointments.map((appointment) => (
+            <li key={appointment._id}>
               <div>
                 <p className="text-lg font-semibold">{`Expert: ${appointment.expertName}`}</p>
                 <p>{`Date: ${appointment.date}`}</p>
