@@ -7,20 +7,45 @@ function Home() {
         <main className="bg-blue-100 flex-1 overflow-y-auto p-4">
 
           {/* Landing Content */}
-          <div className="bg-blue-100 flex flex-col justify-center items-center"
-     style={{
-       backgroundImage: `url(${image})`,
-       backgroundSize: 'cover',
-       backgroundRepeat: 'no-repeat',
-       backgroundPosition: 'center',
-       minHeight: '100vh',
-       animation: 'fadeIn 1s ease-in-out',
-     }}>
-
-  <h2 className="text-8xl font-sans text-gray-800 mb-4">Welcome to <span className='font-mono font-bold'>XpertConsult</span></h2>
-  <p className="text-2xl text-gray-800 mb-8">Choose your role to get started:</p>
-
+          <div
+  className="bg-blue-100 flex flex-col justify-center items-center"
+  style={{
+    backgroundImage: `url(${image})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    minHeight: '100vh',
+    animation: 'fadeIn 1s ease-in-out',
+  }}
+>
+  <h1
+    className="text-6xl font-extrabold text-yellow-500 animate__animated animate__fadeIn mb-4"
+    style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
+  >
+    Welcome to{' '}
+    <span className="text-4xl font-extrabold text-blue-500 bg-white rounded p-2">
+      XpertConsult
+    </span>
+  </h1>
+  <p className="text-2xl text-gray-600 mb-8">
+    Your trusted platform for expert consultations.
+  </p>
+  <div className="flex space-x-4">
+    <a
+      href="/experts"
+      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-full transition-transform transform hover:scale-105 duration-300"
+    >
+      Find an Expert
+    </a>
+    <a
+      href="/register"
+      className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-semibold px-6 py-3 rounded-full transition-transform transform hover:scale-105 duration-300"
+    >
+      Sign Up
+    </a>
+  </div>
 </div>
+
 
 
           {/* How It Works Section */}
