@@ -209,7 +209,7 @@ export default function ExpertProfile() {
     axios
       .put(`http://localhost:5000/updateExpertData/${loggedInUserEmail}`, formData)
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         console.log("User data updated successfully");
       })
       .catch((err) => {

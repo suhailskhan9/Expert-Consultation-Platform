@@ -26,7 +26,7 @@ const fileSchema = new mongoose.Schema({
   room: String, 
   author: String, 
   fileName: String, 
-  fileData: String,
+  // fileData: String,
   date: Date, 
   fileUrl: String,
 });
@@ -89,7 +89,7 @@ io.on("connection", (socket) => {
       room,
       author,
       fileName,
-      fileData,
+      // fileData,
       date: new Date(),
       fileUrl: `/uploads/${fileName}`
     });

@@ -196,7 +196,7 @@ function SignupForm({ userType, toggleMode, leftPanel, rightPanel }) {
                   </label>
                   <a href="/forgotpassword" className="text-xs">Forgot Password?</a>
                 </div>
-                <button type="submit" className="border-2 border-blue-400 rounded-full px-12 py-2 inline-block font-semibold hover-bg-blue-400 hover-text-white">Sign Up</button>
+                <button type="submit" className="border-2 border-blue-400 rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue-400 hover:text-white">Sign Up</button>
               </form>
             </div>
           </div>

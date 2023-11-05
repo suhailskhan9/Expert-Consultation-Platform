@@ -78,19 +78,19 @@ function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Expert Cards */}
                 <div className="bg-blue-500 hover:bg-blue-600 text-white border rounded-lg shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg">
-                  <h4 className="text-xl font-bold mb-2">Expert Name 1</h4>
-                  <p className="text-white">Specialization: Legal</p>
+                  <h4 className="text-xl font-bold mb-2">Dr John Doe</h4>
+                  <p className="text-white">Specialization: Medical - Cardiology</p>
                   <p className="text-white">Years of Experience: 10</p>
                 </div>
                 <div className="bg-blue-500 hover:bg-blue-600 text-white border rounded-lg shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg">
-                  <h4 className="text-xl font-bold mb-2">Expert Name 2</h4>
-                  <p className="text-white">Specialization: Medical</p>
+                  <h4 className="text-xl font-bold mb-2">Alice Smith</h4>
+                  <p className="text-white">Specialization: Legal - Family Law</p>
                   <p className="text-white">Years of Experience: 15</p>
                 </div>
                 <div className="bg-blue-500 hover:bg-blue-600 text-white border rounded-lg shadow-md p-4 transition-transform transform hover:scale-105 hover:shadow-lg">
-                  <h4 className="text-xl font-bold mb-2">Expert Name 3</h4>
-                  <p className="text-white">Specialization: Finance</p>
-                  <p className="text-white">Years of Experience: 12</p>
+                  <h4 className="text-xl font-bold mb-2">CodeWithHarry</h4>
+                  <p className="text-white">Specialization: Technology - Web Development</p>
+                  <p className="text-white">Years of Experience: 6</p>
                 </div>
                 {/* Add more cards as needed */}
               </div>

@@ -8,6 +8,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null); // State for handling errors
   const navigate = useNavigate(); // for navigation
 
  
@@ -30,23 +31,44 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
       });
       }
 
-      if (response.status === 200) {
-        // Successful login, you can redirect or perform other actions
+     if (response.status === 200) {
         console.log('Login successful');
-        if(userType === "User"){
-          
-            navigate('/user/userprofile',{ state: { email } })
-          
-        }
-        else{
-            navigate('/expert/expertprofile',{ state: { email } })
+        if (userType === "User") {
+          navigate('/user/userprofile', { state: { email } });
+        } else {
+          navigate('/expert/expertprofile', { state: { email } });
         }
       } else {
         console.log('Login failed');
+        // Check for specific error messages from the server
+        if (response.data && response.data.message) {
+          setError(response.data.message);
+        } else {
+          setError("An error occurred. Please try again.");
+        }
       }
     } catch (error) {
-      console.error('Error:', error);
+  console.error('Error:', error);
+  // Check for different types of errors
+  if (error.response) {
+    if (error.response.status === 401) {
+      // Check for specific error messages from the server
+      if (error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("Incorrect email or password");
+      }
+    } else if (error.response.status === 404) {
+      setError("Account not found. Please sign up.");
+    } else {
+      setError("An error occurred. Please try again.");
     }
+  } else if (error.request) {
+    setError("No response from the server. Please try again later.");
+  } else {
+    setError("An error occurred. Please try again.");
+  }
+}
   };
 
   return (
@@ -113,13 +135,17 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
                   </button>
                 </div>
               </form>
+               {/* Display error message */}
+      {error && (
+        <div className="mt-4 text-red-500">{error}</div>
+      )}
             </div>
           </div>
           <div className={`w-2/5 bg-blue-400 text-white rounded-tr-2xl rounded-br-2xl py-36 px-12 ${rightPanel}`}>
             <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
             <div className="border-2 w-10 border-white inline-block"></div>
             <p className="mb-10">To keep connected with us, please login with your personal info.</p>
-            <button onClick={toggleMode} className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover-text-blue-400 ">
+            <button onClick={toggleMode} className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-blue-400 ">
               Sign Up
             </button>
           </div>
