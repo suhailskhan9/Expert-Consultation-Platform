@@ -518,7 +518,7 @@ app.post('/user/login', async (req, res) => {
         // Fetch booked appointments for the given user ID with a status of 'booked'
         const bookedAppointments = await Appointment.find({ userId, status: 'booked' })
           .populate('expertId') // Populate the 'expertId' reference
-          .select('expertId date timeSlot -_id'); // Select only the desired fields
+          .select('expertId appointmentSlot'); // Select only the desired fields
     
         // Return the booked appointments as a JSON response
         res.json(bookedAppointments);

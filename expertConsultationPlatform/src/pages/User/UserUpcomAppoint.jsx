@@ -90,42 +90,42 @@ const UpcomingAppointmentsPage = () => {
   // console.log(userdata);
   const navigate = useNavigate();
 
-  
   const [userId, setUserId] = useState(null);
   const [appointments, setAppointments] = useState([]);
 
+  async function fetchUserId() {
+    try {
+      const response = await axios.get(`http://localhost:5000/getUserData?email=${userdata.email}`);
+      const userData = response.data;
+      if (userData && userData.length > 0 && userData[0]._id) {
+        setUserId(userData[0]._id);
+      }
+    } catch (error) {
+      console.error('Error fetching user ID:', error);
+    }
+  }
+  console.log(userId)
+
+  
+  // Fetch booked appointments once we have the user's ID
+  async function fetchBookedAppointments() {
+    try {
+      console.log(userId)
+      if (userId) {
+        console.log("fetched")
+
+        const response = await axios.get(`http://localhost:5000/booked-appointments?userId=${userId}`);
+        const bookedAppointments = response.data;
+        setAppointments(bookedAppointments);
+        console.log(appointments)
+      }
+    } catch (error) {
+      console.error('Error fetching booked appointments:', error);
+    }
+  }
+
   useEffect(() => {
     // Fetch user ID based on the user's email
-    async function fetchUserId() {
-      try {
-        const response = await axios.get(`http://localhost:5000/getUserData?email=${userdata.email}`);
-        const userData = response.data;
-        if (userData && userData.length > 0 && userData[0]._id) {
-          setUserId(userData[0]._id);
-        }
-      } catch (error) {
-        console.error('Error fetching user ID:', error);
-      }
-    }
-    console.log(userId)
-
-    
-    // Fetch booked appointments once we have the user's ID
-    async function fetchBookedAppointments() {
-      try {
-        console.log(userId)
-        if (userId) {
-          console.log("fetched")
-
-          const response = await axios.get(`http://localhost:5000/booked-appointments?userId=${userId}`);
-          const bookedAppointments = response.data;
-          setAppointments(bookedAppointments);
-        }
-      } catch (error) {
-        console.error('Error fetching booked appointments:', error);
-      }
-    }
-
     fetchUserId();
     fetchBookedAppointments();
   }, [userdata]);
@@ -160,9 +160,9 @@ const UpcomingAppointmentsPage = () => {
           {appointments.map((appointment) => (
             <li key={appointment._id}>
               <div>
-                <p className="text-lg font-semibold">{`Expert: ${appointment.expertName}`}</p>
-                <p>{`Date: ${appointment.date}`}</p>
-                <p>{`Time: ${appointment.time}`}</p>
+                <p className="text-lg font-semibold">{`Expert: ${appointment.expertId.username}`}</p>
+                <p>{`Date and Time: ${appointment.appointmentSlot}`}</p>
+                {/* <p>{`Time: ${appointment.time}`}</p> */}
               </div>
               {/* Add video and chat options here */}
               <div className="mt-2">
