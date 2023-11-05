@@ -112,7 +112,7 @@ const UpcomingAppointmentsPage = () => {
     try {
       console.log(userId)
       if (userId) {
-        console.log("fetched")
+        // console.log("fetched")
 
         const response = await axios.get(`http://localhost:5000/booked-appointments?userId=${userId}`);
         const bookedAppointments = response.data;
@@ -161,6 +161,7 @@ const UpcomingAppointmentsPage = () => {
             <li key={appointment._id}>
               <div>
                 <p className="text-lg font-semibold">{`Expert: ${appointment.expertId.username}`}</p>
+                <p className="text-lg font-semibold">{`Client: ${appointment.userId.username}`}</p>
                 <p>{`Date and Time: ${appointment.appointmentSlot}`}</p>
                 {/* <p>{`Time: ${appointment.time}`}</p> */}
               </div>

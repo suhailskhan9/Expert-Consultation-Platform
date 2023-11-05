@@ -1,36 +1,77 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar,{SidebarItem} from '../../components/Sidebar';
 import { User, Search, Inbox, MessageCircle, Video, LogOut, Settings, LifeBuoy, Calendar } from "lucide-react";
 import { useLocation } from 'react-router-dom';
 import { useNavigate, Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ExpertUpcomingAppointmentsPage = () => {
   // Sample static data for upcoming appointments
-  const staticAppointments = [
-    {
-      id: 1,
-      userName: 'Prajwal Waghmode',
-      date: 'October 25, 2023',
-      time: '10:00 AM - 11:00 AM',
-    },
-    {
-      id: 2,
-      userName: 'Iliyas Shah',
-      date: 'October 26, 2023',
-      time: '2:00 PM - 3:00 PM',
-    },
-    {
-      id: 3,
-      userName: 'Suhail Khan',
-      date: 'October 26, 2023',
-      time: '8:00 AM - 9:00 AM',
-    },
-    // Add more sample appointments as needed
-  ];
+  // const staticAppointments = [
+  //   {
+  //     id: 1,
+  //     userName: 'Prajwal Waghmode',
+  //     date: 'October 25, 2023',
+  //     time: '10:00 AM - 11:00 AM',
+  //   },
+  //   {
+  //     id: 2,
+  //     userName: 'Iliyas Shah',
+  //     date: 'October 26, 2023',
+  //     time: '2:00 PM - 3:00 PM',
+  //   },
+  //   {
+  //     id: 3,
+  //     userName: 'Suhail Khan',
+  //     date: 'October 26, 2023',
+  //     time: '8:00 AM - 9:00 AM',
+  //   },
+  //   // Add more sample appointments as needed
+  // ];
   const location = useLocation();
   const userdata = location.state
   const navigate = useNavigate();
+
+  const [expertId, setExpertId] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+
+  async function fetchExpertId() {
+    try {
+      const response = await axios.get(`http://localhost:5000/getExpertData?email=${userdata.email}`);
+      const userData = response.data;
+      if (userData && userData.length > 0 && userData[0]._id) {
+        setExpertId(userData[0]._id);
+      }
+    } catch (error) {
+      console.error('Error fetching user ID:', error);
+    }
+  }
+  // console.log(userId)
+
+  
+  // Fetch booked appointments once we have the user's ID
+  async function fetchBookedAppointments() {
+    try {
+      console.log(expertId)
+      if (expertId) {
+        // console.log("fetched")
+
+        const response = await axios.get(`http://localhost:5000/expertbooked-appointments?userId=${expertId}`);
+        const bookedAppointments = response.data;
+        setAppointments(bookedAppointments);
+        console.log(appointments)
+      }
+    } catch (error) {
+      console.error('Error fetching booked appointments:', error);
+    }
+  }
+
+  useEffect(() => {
+    // Fetch user ID based on the user's email
+    fetchExpertId();
+    fetchBookedAppointments();
+  }, [expertId]);
 
   const handleStartChat = () => {
     navigate('/expert/chat');
@@ -54,16 +95,17 @@ const ExpertUpcomingAppointmentsPage = () => {
       <div className="flex-1 p-4">
       <div>
       <h2 className="text-2xl font-semibold mb-4">Upcoming Appointments</h2>
-      {staticAppointments.length === 0 ? (
+      {appointments.length === 0 ? (
         <p>No upcoming appointments.</p>
       ) : (
         <ul>
-          {staticAppointments.map((appointment) => (
-            <li key={appointment.id}>
+          {appointments.map((appointment) => (
+            <li key={appointment._id}>
               <div>
-                <p className="text-lg font-semibold">{`User: ${appointment.userName}`}</p>
-                <p>{`Date: ${appointment.date}`}</p>
-                <p>{`Time: ${appointment.time}`}</p>
+              <p className="text-lg font-semibold">{`Expert: ${appointment.expertId.username}`}</p>
+                <p className="text-lg font-semibold">{`Client: ${appointment.userId.username}`}</p>
+                <p>{`Date and Time: ${appointment.appointmentSlot}`}</p>
+                {/* <p>{`Time: ${appointment.time}`}</p> */}
               </div>
               {/* Add video and chat options here */}
               <div className="mt-2">

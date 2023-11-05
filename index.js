@@ -517,7 +517,26 @@ app.post('/user/login', async (req, res) => {
     console.log(userId)
         // Fetch booked appointments for the given user ID with a status of 'booked'
         const bookedAppointments = await Appointment.find({ userId, status: 'booked' })
-          .populate('expertId') // Populate the 'expertId' reference
+          .populate('expertId userId') // Populate the 'expertId' reference
+          .select('userId expertId appointmentSlot'); // Select only the desired fields
+    
+        // Return the booked appointments as a JSON response
+        res.json(bookedAppointments);
+        console.log(bookedAppointments)
+      } catch (error) {
+        console.error('Error fetching booked appointments:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+    app.get('/expertbooked-appointments', async (req, res) => {
+      try {
+        // Get the user ID from the request query parameters
+        const expertId = req.query.userId;
+    console.log(expertId)
+        // Fetch booked appointments for the given user ID with a status of 'booked'
+        const bookedAppointments = await Appointment.find({ expertId, status: 'booked' })
+          .populate('expertId userId') // Populate the 'expertId' reference
           .select('userId expertId appointmentSlot'); // Select only the desired fields
     
         // Return the booked appointments as a JSON response
