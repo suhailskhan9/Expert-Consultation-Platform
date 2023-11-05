@@ -157,43 +157,94 @@ app.post('/expert', async (req, res) => {
   }
 });
 
+// app.post('/user/login', async (req, res) => {
+//     const { email, password } = req.body;
+  
+//     try {
+//       // Find the user by email
+//       const user = await User.findOne({ email });
+  
+//       if (user && user.password === password) {
+//         // Successful login
+//         return res.status(200).json({ message: 'Login successful' });
+//       }
+  
+//       // Login failed
+//       return res.status(401).json({ message: 'Invalid email or password' });
+//     } catch (error) {
+//       console.error('Error:', error);
+//       res.status(500).json({ message: 'Server error' });
+//     }
+//   });
 app.post('/user/login', async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      // Find the user by email
-      const user = await User.findOne({ email });
-  
-      if (user && user.password === password) {
+  const { email, password } = req.body;
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    if (user) {
+      // User found, check password
+      if (user.password === password) {
         // Successful login
         return res.status(200).json({ message: 'Login successful' });
+      } else {
+        // Incorrect password
+        return res.status(401).json({ message: 'Incorrect password' });
       }
-  
-      // Login failed
-      return res.status(401).json({ message: 'Invalid email or password' });
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ message: 'Server error' });
+    } else {
+      // User not registered
+      return res.status(404).json({ message: 'User not registered' });
     }
-  });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
   
+  // app.post('/expert/login', async (req, res) => {
+  //   const { email, password } = req.body;
+  
+  //   try {
+  //     const expert = await Expert.findOne({ email });
+  
+  //     if (expert && expert.password === password) {
+  //       return res.status(200).json({ message: 'Login successful' });
+  //     }
+  
+  //     return res.status(401).json({ message: 'Invalid email or password' });
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     res.status(500).json({ message: 'Server error' });
+  //   }
+  // });
+
   app.post('/expert/login', async (req, res) => {
     const { email, password } = req.body;
   
     try {
+      // Find the user by email
       const expert = await Expert.findOne({ email });
   
-      if (expert && expert.password === password) {
-        return res.status(200).json({ message: 'Login successful' });
+      if (expert) {
+        // User found, check password
+        if (expert.password === password) {
+          // Successful login
+          return res.status(200).json({ message: 'Login successful' });
+        } else {
+          // Incorrect password
+          return res.status(401).json({ message: 'Incorrect password' });
+        }
+      } else {
+        // User not registered
+        return res.status(404).json({ message: 'Expert not registered' });
       }
-  
-      return res.status(401).json({ message: 'Invalid email or password' });
     } catch (error) {
       console.error('Error:', error);
       res.status(500).json({ message: 'Server error' });
     }
   });
-
+    
   app.get('/getUserData', async (req, res) => {
     try {
       // Fetch expert data based on the email query parameter

@@ -163,13 +163,30 @@ const RoomPage = () => {
   }, []);
 
   const handleCallUser = useCallback(async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
+   try{ const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
       video: true,
     });
     const offer = await peer.getOffer();
     socket.emit("user:call", { to: remoteSocketId, offer });
-    setMyStream(stream);
+    setMyStream(stream);}
+    catch (error) {
+      console.error('Error calling user:', error);
+      if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        // Handle the case where the camera or microphone is not found.
+        console.error('Camera or microphone not found. Please check your devices.');
+        // You might want to inform the user or provide alternative actions.
+      } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        // Handle the case where the user denied permission for camera or microphone access.
+        console.error('Permission denied for camera or microphone access.');
+        // You might want to prompt the user to enable permissions.
+      } else {
+        // Handle other types of errors.
+        console.error('An unexpected error occurred:', error);
+        // You might want to display a generic error message or take specific actions.
+      }
+      // Handle the error, show a message to the user, etc.
+    }
   }, [remoteSocketId, socket]);
 
   const handleIncommingCall = useCallback(
