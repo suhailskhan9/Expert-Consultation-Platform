@@ -128,7 +128,7 @@ const UpcomingAppointmentsPage = () => {
     // Fetch user ID based on the user's email
     fetchUserId();
     fetchBookedAppointments();
-  }, [userdata]);
+  }, [userId]);
 
   const handleStartChat = () => {
     navigate('/user/chat');
