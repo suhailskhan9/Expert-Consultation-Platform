@@ -247,6 +247,56 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       console.error(error);
     }
   };
+
+  let response;
+
+    const checkoutHandler = async (amount) => {
+        try {
+          console.log("call")
+        //  const { data: { key } } = await axios.get("http://www.localhost:4000/api/getkey")
+        response = await axios.get("http://localhost:5000/api/getkey");
+        const key = response.data.key;
+
+          
+        //  const { data: { order } } = await axios.post("http://localhost:4000/api/checkout", {
+        //      amount
+        // })
+        response = await axios.post("http://localhost:5000/api/checkout", {
+  amount
+});
+
+const order = response.data.order;
+console.log(order);
+      
+
+
+        const options = {
+            key,
+            amount: order.amount,
+            currency: "INR",
+            name: "XpertConsult",
+            description: "Tutorial of RazorPay",
+            image: "https://cdn1.vectorstock.com/i/1000x1000/39/55/expert-advice-consulting-service-business-help-vector-20513955.jpg",
+            order_id: order.id,
+            callback_url: "http://localhost:5000/api/paymentverification",
+            // prefill: {
+            //     name: "Gaurav Kumar",
+            //     email: "gaurav.kumar@example.com",
+            //     contact: "9999999999"
+            // },
+            notes: {
+                "address": "Razorpay Corporate Office"
+            },
+            theme: {
+                "color": "#3B82D9"
+            }
+        };
+        const razor = new window.Razorpay(options);
+        razor.open();}catch (error) {
+            // Handle the error here
+            console.error("Error in checkoutHandler:", error);}
+    }
+
   
   console.log(bookedSlots);
   
@@ -293,6 +343,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       {/* Form to book a slot */}
       <form  onSubmit={(e)=>{
         e.preventDefault()
+        checkoutHandler(price)
         bookAppointment(expertId, selectedSlot)
         }}>
         <div className="mb-4">
@@ -327,7 +378,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-         
+
         >
           Book Slot
         </button>

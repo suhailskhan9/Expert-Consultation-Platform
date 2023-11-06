@@ -14,6 +14,8 @@ import ExpertUpcomingAppointmentsPage from './pages/Expert/ExpUpcomAppoint.jsx'
 import ChatHome from './components/Chat/ChatHome.jsx'
 import App from './components/Video/App.jsx'
 import reportWebVitals from './components/Video/reportWebVitals.js'
+import ExpertCard from './components/Card/ExpertCard.jsx'
+import PaymentSuccess from "./components/Card/PaymentSuccess";
 
 
 const router = createBrowserRouter(
@@ -33,6 +35,7 @@ const router = createBrowserRouter(
         <Route path="login" element = {<UserLoginSignUp/>} />  
         <Route path="userprofile" element={<UserProfile />} />
         <Route path="usersearch" element={<UserSearch />} />
+        <Route path="paymentsuccess" element={<PaymentSuccess />} />
         <Route path="appointments" element={<UpcomingAppointmentsPage />} />
         <Route path="chat" element={<ChatHome />} />
         <Route path="video/*" element={<App />} />

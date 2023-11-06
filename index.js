@@ -9,6 +9,18 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
+
+const dotenv = require("dotenv");
+const paymentRoute = require("./routes/paymentRoutes.js");
+const Razorpay = require("razorpay");
+
+dotenv.config({ path: "./config/config.env" });
+
+// import { config } from "dotenv";
+// import paymentRoute from "./routes/paymentRoutes.js";
+// config({ path: "./config/config.env" });
+// import Razorpay from "razorpay";
+
 // const io = require("socket.io")(server, {
 //   cors: {
 //     origin: "*",
@@ -27,6 +39,25 @@ const io = new Server(server, {
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use(express.json()); // Add this line to parse JSON requests
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", paymentRoute);
+
+app.get("/api/getkey", (req, res) =>
+  res.status(200).json({ key: process.env.RAZORPAY_API_KEY })
+);
+
+// export const instance = new Razorpay({
+//   key_id: process.env.RAZORPAY_API_KEY,
+//   key_secret: process.env.RAZORPAY_API_SECRET,
+// });
+
+module.exports = {
+  instance: new Razorpay({
+    key_id: process.env.RAZORPAY_API_KEY,
+    key_secret: process.env.RAZORPAY_API_SECRET,
+  }),
+};
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -109,12 +140,34 @@ const fileSchema = new mongoose.Schema({
   fileUrl: String,
 });
 
+const paymentSchema = new mongoose.Schema({
+  razorpay_order_id: {
+    type: String,
+    required: true,
+  },
+  razorpay_payment_id: {
+    type: String,
+    required: true,
+  },
+  razorpay_signature: {
+    type: String,
+    required: true,
+  },
+});
+
+
+
 const User = mongoose.model('User', userSchema);
 const Expert = mongoose.model('Expert', expertSchema);
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 // const Room = mongoose.model('Room', roomSchema);
 const Message = mongoose.model("Message", messageSchema);
 const File = mongoose.model("File", fileSchema);
+// export const Payment = mongoose.model("Payment", paymentSchema);
+
+const Payment = mongoose.model("Payment", paymentSchema);
+
+module.exports = Payment;
 
 app.post('/user', async (req, res) => {
   const { username, email, password } = req.body;
