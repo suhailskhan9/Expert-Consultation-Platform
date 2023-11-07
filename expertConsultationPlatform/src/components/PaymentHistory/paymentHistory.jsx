@@ -53,7 +53,7 @@ const PayementHistoryPage = () => {
           <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch" state={userdata} />
           <SidebarItem icon={<Inbox size={20} />} text="Payment History" to="/user/paymenthistory" active/>
           <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to="/user/appointments"state={userdata} />
-          <SidebarItem icon={<LogOut />} text="Log Out" />
+          <SidebarItem icon={<LogOut />} text="Log Out" to={"/"} state={null}/>
           <hr className="my-3" />
           <SidebarItem icon={<Settings size={20} />} text="Settings" />
           <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />

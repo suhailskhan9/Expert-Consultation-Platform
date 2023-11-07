@@ -86,7 +86,7 @@ const ExpertUpcomingAppointmentsPage = () => {
   <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments"  active />
   <SidebarItem icon={<Inbox size={20} />} text="Inbox" to="" />
   {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
-  <SidebarItem icon={<LogOut />} text="Log Out" />
+  <SidebarItem icon={<LogOut />} text="Log Out" to={"/"} state={null}/>
   <hr className="my-3" />
   <SidebarItem icon={<Settings size={20} />} text="Settings" />
   <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
