@@ -216,7 +216,7 @@ const paymentVerification = async (req, res) => {
       });
 
       res.redirect(
-        `http://localhost:5173/paymentsuccess?reference=${razorpay_payment_id}`
+        `http://localhost:5173/user/paymentsuccess?reference=${razorpay_payment_id}`
       );
     } catch (error) {
       // Handle the database operation error, if any

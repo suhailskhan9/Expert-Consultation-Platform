@@ -40,6 +40,7 @@ const router = createBrowserRouter(
         <Route path="chat" element={<ChatHome />} />
         <Route path="video/*" element={<App />} />
       </Route>
+   
     </Route>
   )
 )

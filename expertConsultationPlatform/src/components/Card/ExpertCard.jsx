@@ -212,7 +212,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       });
       console.log(response.data.message);
       
-    window.alert(response.data.message);
+    // window.alert(response.data.message);
       setBookedSlots((prevBookedSlots) => [...prevBookedSlots, appointmentSlot]);
 
       updateAppointmentStatus();

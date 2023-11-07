@@ -1,4 +1,4 @@
-  import React from 'react'
+import React from 'react'
 import image from '../../assets/Consulting-Illustration.png'
 function Home() {
   return (
@@ -19,15 +19,13 @@ function Home() {
   }}
 >
   <h1
-    className="text-6xl font-extrabold text-yellow-500 animate__animated animate__fadeIn mb-4"
+    className="text-6xl font-extrabold text-blue-500 bg-blue-200 bg-opacity-50 rounded p-2  animate__animated animate__fadeIn mb-4"
     style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
   >
-    Welcome to{' '}
-    <span className="text-4xl font-extrabold text-blue-500 bg-white rounded p-2">
-      XpertConsult
-    </span>
+    Welcome to XpertConsult
+
   </h1>
-  <p className="text-2xl text-gray-600 mb-8">
+  <p className="text-2xl text-gray-600 mb-8 bg-blue-200 bg-opacity-50">
     Your trusted platform for expert consultations.
   </p>
   <div className="flex space-x-4">
