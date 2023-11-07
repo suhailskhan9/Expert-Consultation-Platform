@@ -1,6 +1,14 @@
-import React from 'react'
+import React,{useRef} from 'react'
 import image from '../../assets/Consulting-Illustration.png'
 function Home() {
+  const scrollToFeaturedExperts = () => {
+    const featuredExpertsSection = document.getElementById('featured-experts');
+    if (featuredExpertsSection) {
+      featuredExpertsSection.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  };
   return (
     <>
         {/* Main Content */}
@@ -29,12 +37,12 @@ function Home() {
     Your trusted platform for expert consultations.
   </p>
   <div className="flex space-x-4">
-    <a
-      href="/experts"
-      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-full transition-transform transform hover:scale-105 duration-300"
-    >
-      Find an Expert
-    </a>
+  <button
+              onClick={scrollToFeaturedExperts}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-full transition-transform transform hover:scale-105 duration-300"
+            >
+              Find an Expert
+            </button>
     <a
       href="/register"
       className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-semibold px-6 py-3 rounded-full transition-transform transform hover:scale-105 duration-300"
@@ -70,7 +78,7 @@ function Home() {
           </section>
 
           {/* Featured Experts Section */}
-          <section className="bg-blue-100 py-8">
+          <section id="featured-experts" className="bg-blue-100 py-8">
             <div className="container mx-auto">
               <h3 className="text-2xl font-bold text-gray-800 mb-4">Featured Experts</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
