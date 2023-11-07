@@ -19,7 +19,7 @@ const paymentRoute = express.Router();
 const Razorpay = require("razorpay");
 
 dotenv.config({ path: "./config/config.env" });
-
+const nodemailer=require("nodemailer");
 // import { config } from "dotenv";
 // import paymentRoute from "./routes/paymentRoutes.js";
 // config({ path: "./config/config.env" });
@@ -771,5 +771,63 @@ io.on("connection", (socket) => {
 //     io.to(data.to).emit("callaccepted", data.signal);
 //   });
 // });
+
+//Email
+app.use(express.json({limit:'25mb'}));
+app.use(express.urlencoded({limit:"25mb"}));
+app.use((req,res,next)=>{
+  res.setHeader("Access-Control-Allow-Origin","*");
+  next();
+});
+
+function sendEmail(recipientemail,subject,message){
+  var mail=recipientemail;
+  return new Promise((resolve,reject) => {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      // host: "smtp.gmail.com",
+      // port: 465,
+      // secure: true,
+      auth:{
+        user:'xpertconsultt@gmail.com',
+        pass:'wimm bffy qkdo jwkc'
+      },
+    });
+
+    const mail_configs = {
+      from : 'xpertconsultt@gmail.com',
+      to : mail,
+      subject:subject,
+      text : message,
+    };
+
+    transporter.sendMail(mail_configs,function(error,info){
+      if(error){
+        console.log(error);
+        return reject({message:`An error has occured`});
+      }
+      return resolve({message: "Email Sent Successfully"});
+    });
+  });
+}
+
+// app.get("/email", (req, res) => {
+//   sendEmail()
+//     .then((response) => res.send(response.message))
+//     .catch((error) => res.status(500).send(error.message));
+// });
+
+app.post("/send_email",(req,res) => {
+  console.log("in app.post send email");
+  console.log(req.body);
+  var email=req.body.Usermail;
+  var subject=req.body.subject;
+  var message=req.body.message;
+  console.log("email to send "+req.body.Usermail);
+  sendEmail(email,subject,message)
+  .then((response) => res.send(response.message))
+  .catch((error) => res.status(500).send(error.message));
+})
+
 
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

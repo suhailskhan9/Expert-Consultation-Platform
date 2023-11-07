@@ -60,7 +60,7 @@ import React, { useState, useEffect } from 'react';
 
 
 const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
-  const { _id , username, categories, price, availability, contact} = expert;
+  const { _id , username, categories, price, availability, contact, email} = expert;
   const location = useLocation();
   const userEmail = userdata?.email;
   const [isModalOpen, setModalOpen] = useState(false);
@@ -70,7 +70,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
   const [userId, setUserId] = useState(null);
   let expertId;
   expertId = _id;
-  console.log(expertId)
+  console.log("expert id : "+expertId);
 
   // console.log(userdata)
   const [slots, setSlots] = useState([]);
@@ -216,6 +216,8 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       setBookedSlots((prevBookedSlots) => [...prevBookedSlots, appointmentSlot]);
 
       updateAppointmentStatus();
+      
+      sendMail_genJoinCode();
 
       // After booking, you can handle any necessary updates
       // For example, refreshing the list of available slots, etc.
@@ -223,7 +225,35 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       console.error(error);
     }
   };
+  function sendMail_genJoinCode(){
+    var characters='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz'
+    var random_string='';
+    for(var i,i=0;i<5;i++){
+      random_string+=characters.charAt(Math.floor(Math.random()*characters.length));
+    }
+    console.log(random_string);
+    
+    var subject="Appointment Booked";
+    var message="Your meeting has been scheduled. \nUser Email: "+userEmail+"\nJoining Code : "+random_string;
+    sendMail(email,subject,message);
 
+    var subject ="Appointment Booked";
+    var message="Your meeting has been scheduled with "+username+"\nExpert Email: "+email+"\nJoining Code : "+random_string;
+    console.log("user email : "+userEmail);
+    sendMail(userEmail,subject,message);
+  }
+  function sendMail(Usermail,subject,message){
+    if(Usermail && subject && message){
+    axios.post("http://localhost:5000/send_email",{
+      Usermail,
+      subject,
+      message,
+    })
+  }
+  else{
+  return alert("Details are not proper");
+  }
+  }
   const updateAppointmentStatus = async () => {
     try {
       for (const slot of bookedSlots) {
