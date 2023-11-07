@@ -16,13 +16,17 @@ import App from './components/Video/App.jsx'
 import reportWebVitals from './components/Video/reportWebVitals.js'
 import ExpertCard from './components/Card/ExpertCard.jsx'
 import PaymentSuccess from "./components/Card/PaymentSuccess";
+import Contact from './pages/Contact/Contact.jsx'
+import About from './pages/About/About.jsx'
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element = {<Layout/>}>
       <Route path='' element = {<Home/>}/>
-
+      <Route path='contact' element = {<Contact/>}/>
+      <Route path='about' element = {<About/>}/>
+      
       <Route path='expert/'  >
       <Route path="login" element = {<ExpertLoginSignUp/>} /> 
         <Route path="expertprofile" element={<ExpertProfile />} />
