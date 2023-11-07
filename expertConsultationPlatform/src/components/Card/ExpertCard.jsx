@@ -252,7 +252,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
 
     const checkoutHandler = async (amount) => {
         try {
-          console.log("call")
+          // console.log(amount)
         //  const { data: { key } } = await axios.get("http://www.localhost:4000/api/getkey")
         response = await axios.get("http://localhost:5000/api/getkey");
         const key = response.data.key;
@@ -264,7 +264,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
         response = await axios.post("http://localhost:5000/api/checkout", {
   amount
 });
-
+console.log(response)
 const order = response.data.order;
 console.log(order);
       
@@ -291,8 +291,16 @@ console.log(order);
                 "color": "#3B82D9"
             }
         };
-        const razor = new window.Razorpay(options);
-        razor.open();}catch (error) {
+        // const razor = new window.Razorpay(options);
+        // razor.open();
+        if (window.Razorpay) {
+          const razor = new window.Razorpay(options);
+          razor.open();
+        } else {
+          console.error('Razorpay library not found.');
+        }
+        
+      }catch (error) {
             // Handle the error here
             console.error("Error in checkoutHandler:", error);}
     }

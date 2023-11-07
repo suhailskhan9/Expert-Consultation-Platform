@@ -52,7 +52,7 @@
 // import crypto from "crypto";
 // import { Payment } from "../index.js";
 
-const instance = require("../index.js").instance;
+const {instance} = require("../index.js")
 const crypto = require("crypto");
 const Payment = require("../index.js").Payment;
 
@@ -62,6 +62,7 @@ const checkout = async (req, res) => {
       amount: Number(req.body.amount * 100),
       currency: "INR",
     };
+
     const order = await instance.orders.create(options);
 
     res.status(200).json({

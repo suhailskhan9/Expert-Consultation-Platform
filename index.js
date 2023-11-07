@@ -10,8 +10,12 @@ const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
 
+const crypto = require("crypto");
+
 const dotenv = require("dotenv");
-const paymentRoute = require("./routes/paymentRoutes.js");
+// const paymentRoute = require("./routes/paymentRoutes.js");
+const paymentRoute = express.Router();
+
 const Razorpay = require("razorpay");
 
 dotenv.config({ path: "./config/config.env" });
@@ -47,18 +51,17 @@ app.get("/api/getkey", (req, res) =>
   res.status(200).json({ key: process.env.RAZORPAY_API_KEY })
 );
 
-// export const instance = new Razorpay({
-//   key_id: process.env.RAZORPAY_API_KEY,
-//   key_secret: process.env.RAZORPAY_API_SECRET,
-// });
+const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_API_SECRET,
+});
 
-module.exports = {
-  instance: new Razorpay({
-    key_id: process.env.RAZORPAY_API_KEY,
-    key_secret: process.env.RAZORPAY_API_SECRET,
-  }),
-};
-
+// module.exports = {
+//   instance: new Razorpay({
+//     key_id: process.env.RAZORPAY_API_KEY,
+//     key_secret: process.env.RAZORPAY_API_SECRET,
+//   }),
+// };
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -163,11 +166,80 @@ const Appointment = mongoose.model('Appointment', appointmentSchema);
 // const Room = mongoose.model('Room', roomSchema);
 const Message = mongoose.model("Message", messageSchema);
 const File = mongoose.model("File", fileSchema);
-// export const Payment = mongoose.model("Payment", paymentSchema);
-
 const Payment = mongoose.model("Payment", paymentSchema);
 
-module.exports = Payment;
+// const Payment = mongoose.model("Payment", paymentSchema);
+
+// module.exports = Payment;
+const checkout = async (req, res) => {
+  try {
+    const options = {
+      amount: Number(req.body.amount * 100),
+      currency: "INR",
+    };
+
+    const order = await instance.orders.create(options);
+console.log(order);
+    res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (error) {
+    // Handle the error here
+    res.status(500).json({
+      success: false,
+      error: error.message, // You can provide more detailed error information if needed
+    });
+  }
+};
+
+const paymentVerification = async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
+
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+  const expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
+    .update(body.toString())
+    .digest("hex");
+
+  const isAuthentic = expectedSignature === razorpay_signature;
+
+  if (isAuthentic) {
+    try {
+      // Database operations come here
+      await Payment.create({
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      });
+
+      res.redirect(
+        `http://localhost:5173/paymentsuccess?reference=${razorpay_payment_id}`
+      );
+    } catch (error) {
+      // Handle the database operation error, if any
+      res.status(500).json({
+        success: false,
+        error: error.message, // You can provide more detailed error information if needed
+      });
+    }
+  } else {
+    res.status(400).json({
+      success: false,
+    });
+  }
+};
+
+// module.exports = {
+//   checkout,
+//   paymentVerification,
+// };
+
+paymentRoute.post('/checkout', checkout);
+paymentRoute.post('/paymentverification', paymentVerification);
+
 
 app.post('/user', async (req, res) => {
   const { username, email, password } = req.body;
