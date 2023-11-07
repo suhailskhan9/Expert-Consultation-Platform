@@ -780,8 +780,7 @@ app.use((req,res,next)=>{
   next();
 });
 
-function sendEmail(recipientemail,subject,message){
-  var mail=recipientemail;
+function sendEmail({Usermail,subject,message}){
   return new Promise((resolve,reject) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -796,7 +795,7 @@ function sendEmail(recipientemail,subject,message){
 
     const mail_configs = {
       from : 'xpertconsultt@gmail.com',
-      to : mail,
+      to : Usermail,
       subject:subject,
       text : message,
     };
@@ -818,13 +817,7 @@ function sendEmail(recipientemail,subject,message){
 // });
 
 app.post("/send_email",(req,res) => {
-  console.log("in app.post send email");
-  console.log(req.body);
-  var email=req.body.Usermail;
-  var subject=req.body.subject;
-  var message=req.body.message;
-  console.log("email to send "+req.body.Usermail);
-  sendEmail(email,subject,message)
+  sendEmail(req.body)
   .then((response) => res.send(response.message))
   .catch((error) => res.status(500).send(error.message));
 })
