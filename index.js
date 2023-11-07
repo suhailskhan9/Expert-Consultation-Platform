@@ -144,6 +144,13 @@ const fileSchema = new mongoose.Schema({
 });
 
 const paymentSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  amount:{
+    type:String,
+  },
   razorpay_order_id: {
     type: String,
     required: true,
@@ -194,8 +201,11 @@ console.log(order);
 };
 
 const paymentVerification = async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature} =
     req.body;
+  const amount = (req.query.amount)/100;
+  const userId = req.query.userId;
+
 
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
@@ -210,6 +220,8 @@ const paymentVerification = async (req, res) => {
     try {
       // Database operations come here
       await Payment.create({
+        userId,
+        amount,
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
@@ -669,6 +681,22 @@ app.post('/user/login', async (req, res) => {
         console.log(bookedAppointments)
       } catch (error) {
         console.error('Error fetching booked appointments:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+    app.get('/payment-receipt', async (req, res) => {
+      try {
+        const userId = req.query.userId;
+        // console.log(userId)
+        const paymentReceipt = await Payment.find({ userId })
+          .populate('userId')
+          .select('userId amount razorpay_order_id razorpay_payment_id'); 
+    
+          res.json(paymentReceipt);
+        // console.log(paymentReceipt)
+      } catch (error) {
+        console.error('Error fetching payment receipts:', error);
         res.status(500).json({ message: 'Server error' });
       }
     });

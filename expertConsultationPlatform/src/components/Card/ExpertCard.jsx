@@ -278,14 +278,15 @@ console.log(order);
             description: "Tutorial of RazorPay",
             image: "https://cdn1.vectorstock.com/i/1000x1000/39/55/expert-advice-consulting-service-business-help-vector-20513955.jpg",
             order_id: order.id,
-            callback_url: "http://localhost:5000/api/paymentverification",
+            callback_url: `http://localhost:5000/api/paymentverification?amount=${order.amount}&userId=${userId}`,
             // prefill: {
             //     name: "Gaurav Kumar",
             //     email: "gaurav.kumar@example.com",
             //     contact: "9999999999"
             // },
             notes: {
-                "address": "Razorpay Corporate Office"
+                "address": "Razorpay Corporate Office",
+                "amount": order.amount,
             },
             theme: {
                 "color": "#3B82D9"

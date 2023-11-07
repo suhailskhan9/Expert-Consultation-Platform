@@ -198,7 +198,7 @@ console.log(userdata)
       <Sidebar className="w-64">
   <SidebarItem icon={<User size={20} />} text="Profile" active />
   <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch" state={userdata} />
-  <SidebarItem icon={<Inbox size={20} />} text="Inbox" to="" />
+  <SidebarItem icon={<Inbox size={20} />} text="Payment History" to="/user/paymenthistory" state={userdata} />
   <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to="/user/appointments" state={userdata}/>
   {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
   <SidebarItem icon={<LogOut />} text="Log Out" />
