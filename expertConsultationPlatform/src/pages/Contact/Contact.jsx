@@ -21,7 +21,8 @@ const Contact = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8">
+    <div className="bg-blue-100 min-h-screen">
+    <div className="container mx-auto p-2">
       <h2 className="text-3xl font-semibold mb-4">Contact Us</h2>
       <p className="text-gray-700 mb-8">
         Have questions or suggestions? We would love to hear from you! Fill out the form
@@ -39,7 +40,7 @@ const Contact = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="mt-1 p-2 border rounded-md w-full"
+            className="mt-1 p-2 border rounded-md w-full bg-gray-100"
             required
           />
         </div>
@@ -54,7 +55,7 @@ const Contact = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="mt-1 p-2 border rounded-md w-full"
+            className="mt-1 p-2 border rounded-md w-full bg-gray-100"
             required
           />
         </div>
@@ -69,7 +70,7 @@ const Contact = () => {
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            className="mt-1 p-2 border rounded-md w-full"
+            className="mt-1 p-2 border rounded-md w-full bg-gray-100"
             required
           />
         </div>
@@ -83,7 +84,7 @@ const Contact = () => {
             name="message"
             value={formData.message}
             onChange={handleChange}
-            className="mt-1 p-2 border rounded-md w-full h-32"
+            className="mt-1 p-2 border rounded-md w-full h-32 bg-gray-100"
             required
           />
         </div>
@@ -95,6 +96,7 @@ const Contact = () => {
           Submit
         </button>
       </form>
+    </div>
     </div>
   );
 };

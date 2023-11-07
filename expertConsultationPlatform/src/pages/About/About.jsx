@@ -2,8 +2,9 @@ import React from 'react';
 
 const About = () => {
   return (
-    <div className="container mx-auto mt-8">
-      <h2 className="text-3xl font-semibold mb-4">About Us</h2>
+    <div className="bg-blue-100 min-h-screen">
+    <div className="container mx-auto ">
+      <h2 className="text-3xl font-semibold mb-4  p-2">About Us</h2>
 
       <p className="text-gray-700 mb-8">
         Welcome to XpertConsult, your go-to platform for connecting with expert professionals across
@@ -40,6 +41,7 @@ const About = () => {
         </a>{' '}
         page to get in touch with our team.
       </p>
+    </div>
     </div>
   );
 };
