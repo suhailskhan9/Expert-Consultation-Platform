@@ -125,7 +125,6 @@ const UpcomingAppointmentsPage = () => {
   }
 
   useEffect(() => {
-    // Fetch user ID based on the user's email
     fetchUserId();
     fetchBookedAppointments();
   }, [userId]);
@@ -143,7 +142,6 @@ const UpcomingAppointmentsPage = () => {
   <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch" state={userdata} />
   <SidebarItem icon={<Inbox size={20} />} text="Payment History" to="/user/paymenthistory" state={userdata} />
   <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments"  active />
-  {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
   <SidebarItem icon={<LogOut />} text="Log Out" to={"/"} state={null}/>
   <hr className="my-3" />
   <SidebarItem icon={<Settings size={20} />} text="Settings" />

@@ -42,7 +42,7 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
-app.use(express.json()); // Add this line to parse JSON requests
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", paymentRoute);
@@ -92,38 +92,27 @@ expertSchema.add({
 const appointmentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // If you have a User model
+    ref: 'User',
 
   },
   expertId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Expert', // If you have an Expert model
+    ref: 'Expert',
 
   },
   appointmentSlot: {
-    type: String, // You can store the slot as a string
+    type: String,
 
   },
   status: {
     type: String,
-    enum: ['free', 'booked'], // Status can be 'free' or 'booked'
+    enum: ['free', 'booked'],
 
   },
   bookedDateTime: {
     type: Date,
   },
 });
-
-
-
-// const roomSchema = new mongoose.Schema({
-//   roomID: String,
-//   users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-//   experts: [{ type: Schema.Types.ObjectId, ref: 'Expert' }],
-//   roomName: String,
-//   roomType: String,
-//   createdAt: Date
-// });
 
 const messageSchema = new mongoose.Schema({
   room: String,
@@ -170,14 +159,11 @@ const paymentSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 const Expert = mongoose.model('Expert', expertSchema);
 const Appointment = mongoose.model('Appointment', appointmentSchema);
-// const Room = mongoose.model('Room', roomSchema);
 const Message = mongoose.model("Message", messageSchema);
 const File = mongoose.model("File", fileSchema);
 const Payment = mongoose.model("Payment", paymentSchema);
 
-// const Payment = mongoose.model("Payment", paymentSchema);
 
-// module.exports = Payment;
 const checkout = async (req, res) => {
   try {
     const options = {
@@ -192,10 +178,9 @@ console.log(order);
       order,
     });
   } catch (error) {
-    // Handle the error here
     res.status(500).json({
       success: false,
-      error: error.message, // You can provide more detailed error information if needed
+      error: error.message,
     });
   }
 };
@@ -218,7 +203,6 @@ const paymentVerification = async (req, res) => {
 
   if (isAuthentic) {
     try {
-      // Database operations come here
       await Payment.create({
         userId,
         amount,
@@ -231,10 +215,9 @@ const paymentVerification = async (req, res) => {
         `http://localhost:5173/user/paymentsuccess?reference=${razorpay_payment_id}`
       );
     } catch (error) {
-      // Handle the database operation error, if any
       res.status(500).json({
         success: false,
-        error: error.message, // You can provide more detailed error information if needed
+        error: error.message,
       });
     }
   } else {
@@ -243,11 +226,6 @@ const paymentVerification = async (req, res) => {
     });
   }
 };
-
-// module.exports = {
-//   checkout,
-//   paymentVerification,
-// };
 
 paymentRoute.post('/checkout', checkout);
 paymentRoute.post('/paymentverification', paymentVerification);
@@ -294,43 +272,19 @@ app.post('/expert', async (req, res) => {
   }
 });
 
-// app.post('/user/login', async (req, res) => {
-//     const { email, password } = req.body;
-  
-//     try {
-//       // Find the user by email
-//       const user = await User.findOne({ email });
-  
-//       if (user && user.password === password) {
-//         // Successful login
-//         return res.status(200).json({ message: 'Login successful' });
-//       }
-  
-//       // Login failed
-//       return res.status(401).json({ message: 'Invalid email or password' });
-//     } catch (error) {
-//       console.error('Error:', error);
-//       res.status(500).json({ message: 'Server error' });
-//     }
-//   });
 app.post('/user/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find the user by email
     const user = await User.findOne({ email });
 
     if (user) {
-      // User found, check password
       if (user.password === password) {
-        // Successful login
         return res.status(200).json({ message: 'Login successful' });
       } else {
-        // Incorrect password
         return res.status(401).json({ message: 'Incorrect password' });
       }
     } else {
-      // User not registered
       return res.status(404).json({ message: 'User not registered' });
     }
   } catch (error) {
@@ -339,22 +293,6 @@ app.post('/user/login', async (req, res) => {
   }
 });
   
-  // app.post('/expert/login', async (req, res) => {
-  //   const { email, password } = req.body;
-  
-  //   try {
-  //     const expert = await Expert.findOne({ email });
-  
-  //     if (expert && expert.password === password) {
-  //       return res.status(200).json({ message: 'Login successful' });
-  //     }
-  
-  //     return res.status(401).json({ message: 'Invalid email or password' });
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     res.status(500).json({ message: 'Server error' });
-  //   }
-  // });
 
   app.post('/expert/login', async (req, res) => {
     const { email, password } = req.body;
@@ -384,11 +322,9 @@ app.post('/user/login', async (req, res) => {
     
   app.get('/getUserData', async (req, res) => {
     try {
-      // Fetch expert data based on the email query parameter
       const email = req.query.email;
       const users = await User.find({ email });
       // console.log(users)
-      // Send the expert data as a JSON response
       res.json(users);
     } catch (error) {
       console.error('Error:', error);
@@ -398,10 +334,8 @@ app.post('/user/login', async (req, res) => {
 
   app.get('/api/experts', async (req, res) => {
     try {
-      // Fetch all experts
       const experts = await Expert.find();
   
-      // Send the expert data as a JSON response
       res.json(experts);
     } catch (error) {
       console.error('Error:', error);
@@ -411,11 +345,9 @@ app.post('/user/login', async (req, res) => {
 
   app.get('/getExpertData', async (req, res) => {
     try {
-      // Fetch expert data based on the email query parameter
       const email = req.query.email;
       const experts = await Expert.find({ email });
   
-      // Send the expert data as a JSON response
       res.json(experts);
     } catch (error) {
       console.error('Error:', error);
@@ -424,7 +356,7 @@ app.post('/user/login', async (req, res) => {
   });
   
   app.put("/updateUserData/:email", async (req, res) => {
-    const email = req.params.email; // Note the use of req.params to get the email from the URL
+    const email = req.params.email;
     const updatedUserData = req.body;
 
     console.log(updatedUserData)
@@ -432,8 +364,7 @@ app.post('/user/login', async (req, res) => {
     try {
       const updatedUser = await User.findOneAndUpdate({ email: email }, {
         $set: {
-          username: updatedUserData.name, // Access username from the request body
-          // Add more fields as needed
+          username: updatedUserData.name,
         }
       }, { new: true });
         
@@ -450,19 +381,18 @@ app.post('/user/login', async (req, res) => {
   });
 
   app.put("/updateExpertData/:email", async (req, res) => {
-    const email = req.params.email; // Get the email from the URL parameter
-    const updatedExpertData = req.body; // This is the data sent in the request body
+    const email = req.params.email; 
+    const updatedExpertData = req.body;
   console.log(updatedExpertData)
     try {
       const updatedExpert = await Expert.findOneAndUpdate({ email: email }, {
         $set: {
-          username: updatedExpertData.name, // Access username from the request body
-          categories: updatedExpertData.categories, // Access category from the request body
-          price: updatedExpertData.price, // Access price from the request body
+          username: updatedExpertData.name, 
+          categories: updatedExpertData.categories,  
+          price: updatedExpertData.price, 
           availability: updatedExpertData.availability,
-          contact: updatedExpertData.contact, // Access contact from the request body
-          languages: updatedExpertData.languages, // Access language from the request body
-          // Add more fields as needed
+          contact: updatedExpertData.contact, 
+          languages: updatedExpertData.languages, 
         }
       }, { new: true });
       // console.log('Updated Expert Data:', updatedExpert);
@@ -503,12 +433,10 @@ app.post('/user/login', async (req, res) => {
     socket.on("send_file", (data) => {
       const { room, author, fileName, fileData } = data;
   
-      // Create a new File document and save it to the database
       const newFile = new File({
         room,
         author,
         fileName,
-        // fileData,
         date: new Date(),
         fileUrl: `/uploads/${fileName}`
       });
@@ -516,7 +444,6 @@ app.post('/user/login', async (req, res) => {
       newFile.save()
         .then(() => {
           console.log('File saved successfully');
-          // Emit the "receive_file" event to notify clients about the uploaded file
           io.to(room).emit("receive_file", {
             room,
             author,
@@ -536,21 +463,18 @@ app.post('/user/login', async (req, res) => {
         File.find({ room: roomName }).exec(),
       ])
         .then(([messageHistory, fileHistory]) => {
-          // Process message history and include align-self styles
           const formattedMessageHistory = messageHistory.map((message) => ({
             ...message.toObject(),
             isUser: message.author === userId,
-            isFile: false, // Add isFile property for messages
+            isFile: false, 
           }));
     
-          // Process file history and include align-self styles
           const formattedFileHistory = fileHistory.map((file) => ({
             ...file.toObject(),
             isUser: file.author === userId,
-            isFile: true, // Add isFile property for files
+            isFile: true, 
           }));
     
-          // Combine message and file history and send it to the client as an array
           socket.emit("chat_history", [...formattedMessageHistory, ...formattedFileHistory]);
         })
         .catch((err) => {
@@ -597,16 +521,14 @@ app.post('/user/login', async (req, res) => {
       const { userId, expertId, appointmentSlot } = req.body;
     
       try {
-        // Create a new appointment record
         const newAppointment = new Appointment({
           userId,
           expertId,
           appointmentSlot,
-          status: 'booked', // Set the status to 'booked' when booking
+          status: 'booked',
           bookedDateTime: new Date(),
         });
     
-        // Save the new appointment
         await newAppointment.save();
     
         return res.status(200).json({ message: 'Appointment booked successfully' });
@@ -616,28 +538,24 @@ app.post('/user/login', async (req, res) => {
       }
     });
     
-    // Route to update appointment status
     app.post('/update-appointment-status', async (req, res) => {
       try {
-        // Get the current time
         const currentTime = new Date();
     
-        // Find and update appointments with status "booked" that have passed
         await Appointment.updateMany(
           {
             status: 'booked',
             bookedDateTime: { $lt: currentTime },
           },
-          { $set: { status: 'free', userId: null, bookedDateTime: null } } // Change status to 'free' when the time has passed
+          { $set: { status: 'free', userId: null, bookedDateTime: null } } 
         );
     
-        // Find and update appointments with status "free" that are in the future
         await Appointment.updateMany(
           {
             status: 'free',
             bookedDateTime: { $gte: currentTime },
           },
-          { $set: { userId: null, bookedDateTime: null } } // Clear userId and bookedDateTime for future 'free' appointments
+          { $set: { userId: null, bookedDateTime: null } }
         );
     
         return res.status(200).json({ message: 'Appointment statuses updated' });
@@ -649,15 +567,12 @@ app.post('/user/login', async (req, res) => {
     
     app.get('/booked-appointments', async (req, res) => {
       try {
-        // Get the user ID from the request query parameters
         const userId = req.query.userId;
     console.log(userId)
-        // Fetch booked appointments for the given user ID with a status of 'booked'
         const bookedAppointments = await Appointment.find({ userId, status: 'booked' })
-          .populate('expertId userId') // Populate the 'expertId' reference
-          .select('userId expertId appointmentSlot'); // Select only the desired fields
+          .populate('expertId userId') 
+          .select('userId expertId appointmentSlot'); 
     
-        // Return the booked appointments as a JSON response
         res.json(bookedAppointments);
         console.log(bookedAppointments)
       } catch (error) {
@@ -668,15 +583,12 @@ app.post('/user/login', async (req, res) => {
 
     app.get('/expertbooked-appointments', async (req, res) => {
       try {
-        // Get the user ID from the request query parameters
         const expertId = req.query.userId;
     console.log(expertId)
-        // Fetch booked appointments for the given user ID with a status of 'booked'
         const bookedAppointments = await Appointment.find({ expertId, status: 'booked' })
-          .populate('expertId userId') // Populate the 'expertId' reference
-          .select('userId expertId appointmentSlot'); // Select only the desired fields
+          .populate('expertId userId') 
+          .select('userId expertId appointmentSlot'); 
     
-        // Return the booked appointments as a JSON response
         res.json(bookedAppointments);
         console.log(bookedAppointments)
       } catch (error) {
@@ -716,12 +628,6 @@ app.get("/", (req, res) => {
   res.send('Server is running.');
 });
 
-
-// const { Server } = require("socket.io");
-
-// const io = new Server(8000, {
-//   cors: true,
-// });
 
 const emailToSocketIdMap = new Map();
 const socketidToEmailMap = new Map();

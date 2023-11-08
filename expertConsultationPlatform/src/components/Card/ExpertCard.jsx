@@ -78,7 +78,6 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
   useEffect(() => {
     console.log('Expert Availability:', availability);
   
-    // Generate slots based on expert's availability
     if (availability) {
       const slots = generateSlots(availability,bookedSlots);
       console.log('Available Slots:', slots);
@@ -89,13 +88,11 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
   
 
   const handleBookAppointment = async() => {
-    // Call the callback function to handle the booking action
     onBookAppointmentClick(expert);
     setModalOpen(true);
     setSelectedSlot('')
     // const userId = props.userId;
 
-  // Extract expertId from expert object
     console.log(userEmail)
 
     try {
@@ -106,14 +103,11 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       setUserId(userData[0]._id);
       console.log('User ID:', userId);
   
-      // Now you have the userId, and you can proceed to create the appointment with this userId.
     } else {
       console.error('User data does not contain userId.');
-      // Handle the case where userId is not available in the response
     }
     } catch (error) {
       console.error('Error fetching user data:', error);
-      // Handle the error appropriately
     }
   };
   const monthNames = [
@@ -124,23 +118,18 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
   const generateSlots = (availability, bookedSlots = []) => {
     const slots = [];
   
-    console.log('Availability:', availability); // Add this line
+    console.log('Availability:', availability);
   
-    // Check if availability is not empty and is a string
     if (availability && typeof availability === 'string') {
-      // Split the availability string by ' - ' and trim to remove extra spaces
       const [startTime, endTime] = availability.split('-').map(time => time.trim());
   
       // console.log('StartTime:', startTime); // Add this line
       // console.log('EndTime:', endTime); // Add this line
   
-      // Check if both start and end times are defined
       if (startTime && endTime) {
-        // Extract the start and end hours
         const startHour = parseInt(startTime.split(':')[0], 10);
         const endHour = parseInt(endTime.split(':')[0], 10);
   
-        // Define the current date
         const currentDate = new Date();
         const year = currentDate.getFullYear();
         const month = currentDate.toLocaleString('en-US', { month: 'long' });
@@ -152,7 +141,6 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
 
           const currentHourLabel = hour >= 12 ? 'PM' : 'AM';
           const slot = `${formattedDate}, ${hour % 12 || 12}:00 ${currentHourLabel} - ${(hour + 1) % 12 || 12}:00 ${currentHourLabel}`;
-          // Check if the slot is not in the list of bookedSlots
           if (!bookedSlots.includes(slot)) {
             slots.push(slot);
           }
@@ -164,7 +152,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       console.error('Invalid availability format:', availability);
     }
   
-    // console.log('Generated Slots:', slots); // Add this line
+    // console.log('Generated Slots:', slots);
   
     return slots;
   };
@@ -219,8 +207,6 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
       
       sendMail_genJoinCode();
 
-      // After booking, you can handle any necessary updates
-      // For example, refreshing the list of available slots, etc.
     } catch (error) {
       console.error(error);
     }
@@ -266,7 +252,6 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
             slot,
           });
   
-          // Update the local bookedSlots array
           const updatedBookedSlots = bookedSlots.filter(bookedSlot => bookedSlot !== slot);
           setBookedSlots(updatedBookedSlots);
 
@@ -309,11 +294,6 @@ console.log(order);
             image: "https://cdn1.vectorstock.com/i/1000x1000/39/55/expert-advice-consulting-service-business-help-vector-20513955.jpg",
             order_id: order.id,
             callback_url: `http://localhost:5000/api/paymentverification?amount=${order.amount}&userId=${userId}`,
-            // prefill: {
-            //     name: "Gaurav Kumar",
-            //     email: "gaurav.kumar@example.com",
-            //     contact: "9999999999"
-            // },
             notes: {
                 "address": "Razorpay Corporate Office",
                 "amount": order.amount,
@@ -322,8 +302,6 @@ console.log(order);
                 "color": "#3B82D9"
             }
         };
-        // const razor = new window.Razorpay(options);
-        // razor.open();
         if (window.Razorpay) {
           const razor = new window.Razorpay(options);
           razor.open();
@@ -332,7 +310,6 @@ console.log(order);
         }
         
       }catch (error) {
-            // Handle the error here
             console.error("Error in checkoutHandler:", error);}
     }
 
@@ -368,18 +345,14 @@ console.log(order);
     <div className="modal bg-white p-6 rounded-md">
       <h2 className="text-2xl font-semibold mb-4">{`Book an appointment with ${username}`}</h2>
       
-      {/* Display available slots */}
       
 
-      {/* Display pricing for call and chat */}
       <div className="mb-4">
         <p className="text-lg font-semibold mb-2">Pricing:</p>
         <p>{`Call: ${price} per 60 minutes`}</p>
         <p>{`Chat: ${price} per 60 minutes`}</p>
-        {/* Add more pricing information as needed */}
       </div>
 
-      {/* Form to book a slot */}
       <form  onSubmit={(e)=>{
         e.preventDefault()
         checkoutHandler(price)
@@ -398,7 +371,6 @@ console.log(order);
         Select a Slot
       </option>
       {availableSlots.map((slot, index) => {
-        // Check if the slot is not in the list of bookedSlots
         if (!bookedSlots.includes(slot)) {
           return (
             <option key={index} value={slot}>
@@ -406,13 +378,11 @@ console.log(order);
             </option>
           );
         }
-        return null; // Skip rendering this slot
+        return null; 
       })}
-            {/* Add more options as needed */}
           </select>
         </div>
         
-        {/* Add other form fields if needed */}
         
         <button
           type="submit"
@@ -423,7 +393,6 @@ console.log(order);
         </button>
       </form>
 
-      {/* Add other options like additional services, etc. */}
       
       <button
         className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md mt-2"
@@ -441,33 +410,5 @@ console.log(order);
 
 export default ExpertCard;
 
-// const ExpertList = () => {
-//   const [experts, setExperts] = useState([]);
-//   const location = useLocation();
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     async function fetchData() {
-//       try {
-//         const response = await axios.get('http://localhost:5000/api/experts'); // Replace with the actual URL of your backend API
-//         setExperts(response.data);
-//         console.log(response.data);
-//       } catch (error) {
-//         console.error('Error:', error);
-//         // Handle error here
-//       }
-//     }
-
-//     fetchData();
-//   }, []);
-
-//   return (
-//     <div>
-//       {experts.map((expert) => (
-//         <ExpertCard key={expert._id} expert={expert} />
-//       ))}
-//     </div>
-//   );
-// };
 
 

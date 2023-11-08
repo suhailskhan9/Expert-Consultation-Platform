@@ -34,7 +34,6 @@ router.route("/checkout").post(async (req, res) => {
   try {
     const result = await checkout(req, res);
     // console.log(result)
-    // Handle the response or additional logic here if needed
   } catch (error) {
     console.error("Error in /api/checkout:", error);
     res.status(500).json({ success: false, error: "Internal server error" });
@@ -44,7 +43,6 @@ router.route("/checkout").post(async (req, res) => {
 router.route("/paymentverification").post(async (req, res) => {
   try {
     const result = await paymentVerification(req, res);
-    // Handle the response or additional logic here if needed
   } catch (error) {
     console.error("Error in /api/paymentverification:", error);
     res.status(500).json({ success: false, error: "Internal server error" });

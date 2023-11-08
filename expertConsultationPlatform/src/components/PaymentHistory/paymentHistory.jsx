@@ -25,7 +25,6 @@ const PayementHistoryPage = () => {
     }
   }
 
-  // Fetch payment history once we have the user's ID
   async function fetchPaymentHistory() {
     try {
       if (userId) {

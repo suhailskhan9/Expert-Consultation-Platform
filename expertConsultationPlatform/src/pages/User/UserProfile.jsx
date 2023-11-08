@@ -140,7 +140,6 @@ console.log(userdata)
         axios
       .get(`http://localhost:5000/getUserData?email=${loggedInUserEmail}`)
       .then((response) => {
-        // Check if the response is an array and has at least one element
         if (Array.isArray(response.data) && response.data.length > 0) {
           const userData = response.data[0]; // Access the first element
           // console.log(userData);
@@ -200,7 +199,6 @@ console.log(userdata)
   <SidebarItem icon={<Search size={20} />} text="Browse Experts" to="/user/usersearch" state={userdata} />
   <SidebarItem icon={<Inbox size={20} />} text="Payment History" to="/user/paymenthistory" state={userdata} />
   <SidebarItem icon={<Calendar size={20} />} text="Upcoming Appointments" to="/user/appointments" state={userdata}/>
-  {/* Replace "Chat" and "Video Call" options with "Upcoming Appointments" */}
   <SidebarItem icon={<LogOut />} text="Log Out" to={"/"} state={null}/>
   <hr className="my-3" />
   <SidebarItem icon={<Settings size={20} />} text="Settings" />
@@ -211,7 +209,6 @@ console.log(userdata)
         <h2 className="text-2xl font-semibold mb-4">User Profile</h2>
 
         {editMode ? (
-          // Edit Profile Form
           <form type="submit" onSubmit={handleSaveClick} className="max-w-md space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-600">
@@ -249,7 +246,6 @@ console.log(userdata)
             </button>
           </form>
         ) : (
-          // View Profile Mode
           <div>
             <div className="mb-4">
               <p className="text-xl font-semibold">Name: {formData.name}</p>
@@ -257,7 +253,6 @@ console.log(userdata)
             <div className="mb-4">
               <p className="text-xl font-semibold">Email: {formData.email}</p>
             </div>
-            {/* Add more user data display as needed */}
             <button onClick={handleEditClick} className="bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-600">
               Edit Profile
             </button>
