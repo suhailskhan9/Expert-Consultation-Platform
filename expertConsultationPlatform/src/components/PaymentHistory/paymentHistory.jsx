@@ -72,6 +72,7 @@ const PayementHistoryPage = () => {
                     <p className="text-lg font-semibold">{`Payment Amount: ${payment.amount} INR`}</p>
                     <p>{`Order ID: ${payment.razorpay_order_id}`}</p>
                     <p>{`Payment ID: ${payment.razorpay_payment_id}`}</p>
+                    <br></br>
                   </div>
                 </li>
               ))}
