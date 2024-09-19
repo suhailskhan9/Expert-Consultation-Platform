@@ -65,10 +65,11 @@ const instance = new Razorpay({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-mongoose.connect('mongodb+srv://prajwalw02:gYqJ6KDQCfp9eT4a@cluster0.ochlqqs.mongodb.net/ExpertConsultDB', {
+mongoose.connect('mongodb+srv://prajwalw02:prajwalw02@cluster0.ochlqqs.mongodb.net/ExpertConsultDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
 
 const userSchema = new mongoose.Schema({
   username: String,
