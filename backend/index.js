@@ -739,6 +739,11 @@
 
 
 
+
+
+
+
+
 const express = require('express');
 const app = express();
 const http = require("http");
@@ -834,26 +839,6 @@ const Appointment = mongoose.model('Appointment', appointmentSchema);
 const Message = mongoose.model("Message", messageSchema);
 const File = mongoose.model("File", fileSchema);
 const Payment = mongoose.model("Payment", paymentSchema);
-
-// Middleware for checking if the user is authenticated
-const authenticateUser = async (req, res, next) => {
-  const { email } = req.body; // Assume email is sent in the body for checking
-  if (!email) {
-    return res.status(401).json({ message: 'Unauthorized access' });
-  }
-  try {
-    const user = await User.findOne({ email });
-    if (user) {
-      req.user = user; // Attach user data to the request
-      next();
-    } else {
-      return res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    console.error('Authentication error:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
 
 // Payment route setup
 const paymentRoute = express.Router();
@@ -973,7 +958,7 @@ app.post('/expert/login', async (req, res) => {
 });
 
 // Get user data
-app.get('/getUserData', authenticateUser, async (req, res) => {
+app.get('/getUserData', async (req, res) => {
   try {
     const email = req.query.email;
     const users = await User.find({ email });
@@ -984,8 +969,21 @@ app.get('/getUserData', authenticateUser, async (req, res) => {
   }
 });
 
+// Get Expert List
+  app.get('/api/experts', async (req, res) => {
+    try {
+      const experts = await Expert.find();
+  
+      res.json(experts);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+
 // Get expert data
-app.get('/getExpertData', authenticateUser, async (req, res) => {
+app.get('/getExpertData', async (req, res) => {
   try {
     const email = req.query.email;
     const experts = await Expert.find({ email });
@@ -995,6 +993,61 @@ app.get('/getExpertData', authenticateUser, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+app.put("/updateUserData/:email", async (req, res) => {
+  const email = req.params.email;
+  const updatedUserData = req.body;
+
+  console.log(updatedUserData)
+
+  try {
+    const updatedUser = await User.findOneAndUpdate({ email: email }, {
+      $set: {
+        username: updatedUserData.name,
+      }
+    }, { new: true });
+      
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    console.log("User data updated successfully");
+    res.status(200).json({ message: "User data updated successfully", updatedUser });
+  } catch (err) {
+    console.error("Error updating user data:", err);
+    res.status(500).json({ error: "Failed to update user data." });
+  }
+});
+
+app.put("/updateExpertData/:email", async (req, res) => {
+  const email = req.params.email; 
+  const updatedExpertData = req.body;
+console.log(updatedExpertData)
+  try {
+    const updatedExpert = await Expert.findOneAndUpdate({ email: email }, {
+      $set: {
+        username: updatedExpertData.name, 
+        categories: updatedExpertData.categories,  
+        price: updatedExpertData.price, 
+        availability: updatedExpertData.availability,
+        contact: updatedExpertData.contact, 
+        languages: updatedExpertData.languages, 
+      }
+    }, { new: true });
+    // console.log('Updated Expert Data:', updatedExpert);
+
+    if (!updatedExpert) {
+      return res.status(404).json({ error: "Expert not found" });
+    }
+
+    console.log("Expert data updated successfully");
+    res.status(200).json({ message: "Expert data updated successfully", updatedExpert });
+  } catch (err) {
+    console.error("Error updating expert data:", err);
+    res.status(500).json({ error: "Failed to update expert data." });
+  }
+});
+
 
 // Socket.io connection handling
 io.on("connection", (socket) => {
@@ -1028,10 +1081,214 @@ io.on("connection", (socket) => {
       .catch(err => console.error(err));
   });
 
+  socket.on("user_connect_history", (userId, roomName) => {
+    Promise.all([
+      Message.find({ room: roomName }).exec(),
+      File.find({ room: roomName }).exec(),
+    ])
+      .then(([messageHistory, fileHistory]) => {
+        const formattedMessageHistory = messageHistory.map((message) => ({
+          ...message.toObject(),
+          isUser: message.author === userId,
+          isFile: false, 
+        }));
+  
+        const formattedFileHistory = fileHistory.map((file) => ({
+          ...file.toObject(),
+          isUser: file.author === userId,
+          isFile: true, 
+        }));
+  
+        socket.emit("chat_history", [...formattedMessageHistory, ...formattedFileHistory]);
+      })
+      .catch((err) => {
+        console.error('Error fetching chat history:', err);
+      });
+   });
+
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id);
   });
 });
+
+app.post('/book-appointment', async (req, res) => {
+      const { userId, expertId, appointmentSlot } = req.body;
+    
+      try {
+        const newAppointment = new Appointment({
+          userId,
+          expertId,
+          appointmentSlot,
+          status: 'booked',
+          bookedDateTime: new Date(),
+        });
+    
+        await newAppointment.save();
+    
+        return res.status(200).json({ message: 'Appointment booked successfully' });
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    
+    app.post('/update-appointment-status', async (req, res) => {
+      try {
+        const currentTime = new Date();
+    
+        await Appointment.updateMany(
+          {
+            status: 'booked',
+            bookedDateTime: { $lt: currentTime },
+          },
+          { $set: { status: 'free', userId: null, bookedDateTime: null } } 
+        );
+    
+        await Appointment.updateMany(
+          {
+            status: 'free',
+            bookedDateTime: { $gte: currentTime },
+          },
+          { $set: { userId: null, bookedDateTime: null } }
+        );
+    
+        return res.status(200).json({ message: 'Appointment statuses updated' });
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    
+    app.get('/booked-appointments', async (req, res) => {
+      try {
+        const userId = req.query.userId;
+    console.log(userId)
+        const bookedAppointments = await Appointment.find({ userId, status: 'booked' })
+          .populate('expertId userId') 
+          .select('userId expertId appointmentSlot'); 
+    
+        res.json(bookedAppointments);
+        console.log(bookedAppointments)
+      } catch (error) {
+        console.error('Error fetching booked appointments:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+    app.get('/expertbooked-appointments', async (req, res) => {
+      try {
+        const expertId = req.query.userId;
+    console.log(expertId)
+        const bookedAppointments = await Appointment.find({ expertId, status: 'booked' })
+          .populate('expertId userId') 
+          .select('userId expertId appointmentSlot'); 
+    
+        res.json(bookedAppointments);
+        console.log(bookedAppointments)
+      } catch (error) {
+        console.error('Error fetching booked appointments:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+    app.get('/payment-receipt', async (req, res) => {
+      try {
+        const userId = req.query.userId;
+        // console.log(userId)
+        const paymentReceipt = await Payment.find({ userId })
+          .populate('userId')
+          .select('userId amount razorpay_order_id razorpay_payment_id'); 
+    
+          res.json(paymentReceipt);
+        // console.log(paymentReceipt)
+      } catch (error) {
+        console.error('Error fetching payment receipts:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+
+    const emailToSocketIdMap = new Map();
+const socketidToEmailMap = new Map();
+
+io.on("connection", (socket) => {
+  console.log(`Socket Connected`, socket.id);
+  socket.on("room:join", (data) => {
+    const { email, room } = data;
+    emailToSocketIdMap.set(email, socket.id);
+    socketidToEmailMap.set(socket.id, email);
+    io.to(room).emit("user:joined", { email, id: socket.id });
+    socket.join(room);
+    io.to(socket.id).emit("room:join", data);
+  });
+
+  socket.on("user:call", ({ to, offer }) => {
+    io.to(to).emit("incomming:call", { from: socket.id, offer });
+  });
+
+  socket.on("call:accepted", ({ to, ans }) => {
+    io.to(to).emit("call:accepted", { from: socket.id, ans });
+  });
+
+  socket.on("peer:nego:needed", ({ to, offer }) => {
+    console.log("peer:nego:needed", offer);
+    io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
+  });
+
+  socket.on("peer:nego:done", ({ to, ans }) => {
+    console.log("peer:nego:done", ans);
+    io.to(to).emit("peer:nego:final", { from: socket.id, ans });
+  });
+});
+
+app.use(express.json({limit:'25mb'}));
+app.use(express.urlencoded({limit:"25mb"}));
+app.use((req,res,next)=>{
+  res.setHeader("Access-Control-Allow-Origin","*");
+  next();
+});
+
+function sendEmail({Usermail,subject,message}){
+  return new Promise((resolve,reject) => {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      // host: "smtp.gmail.com",
+      // port: 465,
+      // secure: true,
+      auth:{
+        user:process.env.EMAIL_USER,
+        pass:process.env.EMAIL_PASS
+      },
+    });
+
+    const mail_configs = {
+      from : process.env.EMAIL_USER,
+      to : Usermail,
+      subject:subject,
+      text : message,
+    };
+
+    transporter.sendMail(mail_configs,function(error,info){
+      if(error){
+        console.log(error);
+        return reject({message:`An error has occured`});
+      }
+      return resolve({message: "Email Sent Successfully"});
+    });
+  });
+}
+
+// app.get("/email", (req, res) => {
+//   sendEmail()
+//     .then((response) => res.send(response.message))
+//     .catch((error) => res.status(500).send(error.message));
+// });
+
+app.post("/send_email",(req,res) => {
+  sendEmail(req.body)
+  .then((response) => res.send(response.message))
+  .catch((error) => res.status(500).send(error.message));
+})
 
 // Server start
 const PORT = process.env.PORT || 5000;
