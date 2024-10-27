@@ -759,7 +759,7 @@ dotenv.config({ path: "./config/config.env" });
 // Set up CORS and other middlewares
 const io = new Server(server, {
   cors: {
-    origin: "https://expert-consultation-platform.vercel.app/",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -885,7 +885,7 @@ const paymentVerification = async (req, res) => {
   const body = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto.createHmac("sha256", process.env.RAZORPAY_API_SECRET)
     .update(body.toString())
-    .digest("hex";
+    .digest("hex");
   
   const isAuthentic = expectedSignature === razorpay_signature;
   
