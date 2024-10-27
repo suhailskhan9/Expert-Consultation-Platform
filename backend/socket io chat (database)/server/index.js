@@ -9,7 +9,6 @@ const path = require("path");
 const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
-
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -43,7 +42,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://expert-consultation-platform.vercel.app/",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
