@@ -764,7 +764,7 @@ dotenv.config({ path: "./config/config.env" });
 // Set up CORS and other middlewares
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://expert-consultation-platform.vercel.app",
     methods: ["GET", "POST"],
   },
 });
