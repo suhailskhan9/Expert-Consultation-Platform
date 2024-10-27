@@ -15,7 +15,7 @@ const PayementHistoryPage = () => {
 
   async function fetchUserId() {
     try {
-      const response = await axios.get(`http://localhost:5000/getUserData?email=${userdata.email}`);
+      const response = await axios.get(`https://expert-consultation-platform-jet.vercel.app/getUserData?email=${userdata.email}`);
       const userData = response.data;
       if (userData && userData.length > 0 && userData[0]._id) {
         setUserId(userData[0]._id);
@@ -28,7 +28,7 @@ const PayementHistoryPage = () => {
   async function fetchPaymentHistory() {
     try {
       if (userId) {
-        const response = await axios.get(`http://localhost:5000/payment-receipt?userId=${userId}`);
+        const response = await axios.get(`https://expert-consultation-platform-jet.vercel.app/payment-receipt?userId=${userId}`);
         const paymentReceipt = response.data;
         setPaymentHistory(paymentReceipt);
       }

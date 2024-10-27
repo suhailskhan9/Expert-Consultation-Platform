@@ -18,7 +18,7 @@ function LoginForm({ userType, toggleMode, leftPanel, rightPanel }) {
 
     try {
       // Make a login request based on user type
-      response = await axios.post(`http://localhost:5000/${userType === 'User' ? 'user' : 'expert'}/login`, {
+      response = await axios.post(`https://expert-consultation-platform-jet.vercel.app/${userType === 'User' ? 'user' : 'expert'}/login`, {
         email,
         password,
       });

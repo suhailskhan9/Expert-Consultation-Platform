@@ -38,7 +38,7 @@ const ExpertUpcomingAppointmentsPage = () => {
 
   async function fetchExpertId() {
     try {
-      const response = await axios.get(`http://localhost:5000/getExpertData?email=${userdata.email}`);
+      const response = await axios.get(`https://expert-consultation-platform-jet.vercel.app/getExpertData?email=${userdata.email}`);
       const userData = response.data;
       if (userData && userData.length > 0 && userData[0]._id) {
         setExpertId(userData[0]._id);
@@ -57,7 +57,7 @@ const ExpertUpcomingAppointmentsPage = () => {
       if (expertId) {
         // console.log("fetched")
 
-        const response = await axios.get(`http://localhost:5000/expertbooked-appointments?userId=${expertId}`);
+        const response = await axios.get(`https://expert-consultation-platform-jet.vercel.app/expertbooked-appointments?userId=${expertId}`);
         const bookedAppointments = response.data;
         setAppointments(bookedAppointments);
         console.log(appointments)
