@@ -138,7 +138,7 @@ export default function UserProfile() {
 
   useEffect(() => {    
         axios
-      .get(`https://expert-consultation-platform-jet.vercel.app/getUserData?email=${loggedInUserEmail}`)
+      .get(`https://expert-consultation-platform.onrender.com/getUserData?email=${loggedInUserEmail}`)
       .then((response) => {
         if (Array.isArray(response.data) && response.data.length > 0) {
           const userData = response.data[0]; // Access the first element
@@ -174,7 +174,7 @@ export default function UserProfile() {
     setEditMode(false);
   console.log(formData)
     axios
-      .put(`https://expert-consultation-platform-jet.vercel.app/updateUserData/${loggedInUserEmail}`, formData)
+      .put(`https://expert-consultation-platform.onrender.com/updateUserData/${loggedInUserEmail}`, formData)
       .then((response) => {
         console.log(response.data)
         console.log("User data updated successfully");

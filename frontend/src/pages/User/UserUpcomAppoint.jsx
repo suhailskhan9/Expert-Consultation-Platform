@@ -95,7 +95,7 @@ const UpcomingAppointmentsPage = () => {
 
   async function fetchUserId() {
     try {
-      const response = await axios.get(`https://expert-consultation-platform-jet.vercel.app/getUserData?email=${userdata.email}`);
+      const response = await axios.get(`https://expert-consultation-platform.onrender.com/getUserData?email=${userdata.email}`);
       const userData = response.data;
       if (userData && userData.length > 0 && userData[0]._id) {
         setUserId(userData[0]._id);
@@ -114,7 +114,7 @@ const UpcomingAppointmentsPage = () => {
       if (userId) {
         // console.log("fetched")
 
-        const response = await axios.get(`https://expert-consultation-platform-jet.vercel.app/booked-appointments?userId=${userId}`);
+        const response = await axios.get(`https://expert-consultation-platform.onrender.com/booked-appointments?userId=${userId}`);
         const bookedAppointments = response.data;
         setAppointments(bookedAppointments);
         console.log(appointments)

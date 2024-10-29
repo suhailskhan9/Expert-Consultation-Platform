@@ -36,7 +36,7 @@ function UserSearch() {
     const handleSearch = async () => {
       // Perform search logic based on searchTerm
       try {
-        const response = await axios.get('https://expert-consultation-platform-jet.vercel.app/api/experts'); // Replace with the actual URL of your backend API
+        const response = await axios.get('https://expert-consultation-platform.onrender.com/api/experts'); // Replace with the actual URL of your backend API
         const filteredResults = response.data.filter((expert) =>
           expert.categories.includes(searchTerm)
         );
@@ -52,7 +52,7 @@ function UserSearch() {
     useEffect(() => {
       async function fetchData() {
         try {
-          const response = await axios.get('https://expert-consultation-platform-jet.vercel.app/api/experts'); // Replace with the actual URL of your backend API
+          const response = await axios.get('https://expert-consultation-platform.onrender.com/api/experts'); // Replace with the actual URL of your backend API
           setExperts(response.data);
           console.log(response.data);
         } catch (error) {

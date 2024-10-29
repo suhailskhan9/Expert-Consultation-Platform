@@ -23,7 +23,7 @@ export default function ExpertProfile() {
 
   useEffect(() => {
     axios
-      .get(`https://expert-consultation-platform-jet.vercel.app/getExpertData?email=${loggedInUserEmail}`)
+      .get(`https://expert-consultation-platform.onrender.com/getExpertData?email=${loggedInUserEmail}`)
       .then((response) => {
         // Check if the response is an array and has at least one element
         if (Array.isArray(response.data) && response.data.length > 0) {
@@ -59,7 +59,7 @@ export default function ExpertProfile() {
     // Handle form submission, e.g., send data to a server
     console.log(formData);
     axios
-      .put(`https://expert-consultation-platform-jet.vercel.app/updateExpertData/${loggedInUserEmail}`, formData)
+      .put(`https://expert-consultation-platform.onrender.com/updateExpertData/${loggedInUserEmail}`, formData)
       .then((response) => {
         console.log("User data updated successfully");
       })

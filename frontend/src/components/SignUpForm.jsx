@@ -121,11 +121,11 @@ function SignupForm({ userType, toggleMode, leftPanel, rightPanel }) {
 
     try {
       if(userType === "User"){
-        response = await axios.post('https://expert-consultation-platform-jet.vercel.app/user', data);
+        response = await axios.post('https://expert-consultation-platform.onrender.com/user', data);
         
       }
       else{
-        response = await axios.post('https://expert-consultation-platform-jet.vercel.app/expert', data);
+        response = await axios.post('https://expert-consultation-platform.onrender.com/expert', data);
       }
       console.log(response.data);
 

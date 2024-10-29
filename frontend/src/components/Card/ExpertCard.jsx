@@ -96,7 +96,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
     console.log(userEmail)
 
     try {
-      const response = await axios.get(`https://expert-consultation-platform-jet.vercel.app/getUserData?email=${userEmail}`);
+      const response = await axios.get(`https://expert-consultation-platform.onrender.com/getUserData?email=${userEmail}`);
       // setUserData(response.data);
      const userData = response.data;
      if (userData.length > 0 && userData[0]._id) {
@@ -193,7 +193,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
     console.log(userId)
     console.log(expertId)
     console.log(appointmentSlot)
-      const response = await axios.post('https://expert-consultation-platform-jet.vercel.app/book-appointment', {
+      const response = await axios.post('https://expert-consultation-platform.onrender.com/book-appointment', {
         userId,
         expertId,
         appointmentSlot,
@@ -230,7 +230,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
   }
   function sendMail(Usermail,subject,message){
     if(Usermail && subject && message){
-    axios.post("https://expert-consultation-platform-jet.vercel.app/send_email",{
+    axios.post("https://expert-consultation-platform.onrender.com/send_email",{
       Usermail,
       subject,
       message,
@@ -248,7 +248,7 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
         const currentDateTime = new Date();
     
         if (slotDateTime <= currentDateTime) {
-          const response = await axios.post('https://expert-consultation-platform-jet.vercel.app/update-appointment-status', {
+          const response = await axios.post('https://expert-consultation-platform.onrender.com/update-appointment-status', {
             slot,
           });
   
@@ -269,14 +269,14 @@ const ExpertCard = ({ expert,onBookAppointmentClick, userdata }) => {
         try {
           // console.log(amount)
         //  const { data: { key } } = await axios.get("http://www.localhost:4000/api/getkey")
-        response = await axios.get("https://expert-consultation-platform-jet.vercel.app/api/getkey");
+        response = await axios.get("https://expert-consultation-platform.onrender.com/api/getkey");
         const key = response.data.key;
 
           
         //  const { data: { order } } = await axios.post("http://localhost:4000/api/checkout", {
         //      amount
         // })
-        response = await axios.post("https://expert-consultation-platform-jet.vercel.app/api/checkout", {
+        response = await axios.post("https://expert-consultation-platform.onrender.com/api/checkout", {
   amount
 });
 console.log(response)
@@ -293,7 +293,7 @@ console.log(order);
             description: "Tutorial of RazorPay",
             image: "https://cdn1.vectorstock.com/i/1000x1000/39/55/expert-advice-consulting-service-business-help-vector-20513955.jpg",
             order_id: order.id,
-            callback_url: `https://expert-consultation-platform-jet.vercel.app/api/paymentverification?amount=${order.amount}&userId=${userId}`,
+            callback_url: `https://expert-consultation-platform.onrender.com/api/paymentverification?amount=${order.amount}&userId=${userId}`,
             notes: {
                 "address": "Razorpay Corporate Office",
                 "amount": order.amount,
